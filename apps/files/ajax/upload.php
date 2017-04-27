@@ -44,6 +44,10 @@ OCP\JSON::setContentTypeHeader('text/plain');
 
 $errorCode = null;
 
+//include face api
+require_once '/var/www/html/owncloud/apps/faceapi/demo_api.php';
+$loacl_file_dir='/var/www/html/owncloud/data/admin/files';
+
 $l = \OC::$server->getL10N('files');
 if (empty($_POST['dirToken'])) {
 	// The standard case, files are uploaded through logged in users :)
@@ -241,13 +245,64 @@ if (\OC\Files\Filesystem::isValidPath($dir) === true) {
 				$result[] = $data;
 			}
 		}
-	}
+
+        /*iterate all upload files */
+        //add code here to call face api.
+        //local path = $dir + $relativePath
+        $face_filename = $files['name'][$i];
+        $face_filename = $loacl_file_dir.$returnedDir.'/'.$face_filename;
+        //call face detect api to get *.json file.   
+        if($face_result = api_detect_face($face_filename)) {
+            $json_name = rtrim($face_filename, '.');
+            if($json_file = fopen($json_name.'.json', "w")) {
+                fwrite($json_file, $face_result);
+                fclose($json_file);
+            }
+            
+            //detect person via face compare api
+            $face_json_result = json_decode($face_result,true);
+            $face_count = count($face_json_result['faces']);
+            for($ii = 0; $ii < $face_count; $ii++) {
+                $face_id = $face_json_result['faces'][$ii]['faceId'];
+                $person_result = identify_face($face_id);
+                $person_json_result = json_decode($person_result, true);
+                if($person_result['identified']==='True') {
+                    //if the guy already there, link this face to the persion.
+                    $link_result = link_person_to_face($person_result, $face_id);
+                }
+                else {
+                    //can't find the person, create a person id with "??"+"random number"
+                    //we will change the person id later with the new tag.
+                    $person_rand = strtotime("now");
+                    $person_rand = '??'.(string)$person_rand;
+                    $person_add_result = add_person($person_rand);
+                    $person_add_json_result =  json_decode($person_add_result, true);
+                    if($person_add_json_result['personId'])
+                        $link_result = link_person_to_face($person_add_json_result['person_id'], $face_id);
+                        //TODO: check the result
+                }     
+            }
+            
+            //$face_count = count($face_data);
+            
+        }
+    }
 } else {
 	$error = $l->t('Invalid directory.');
 }
+
+//$file_num = count($files['name']);
+//for ($i = 0; $i < $fileCount; $i++) {
+//    echo "update file name:" .$files['name'][$i] ."<br/>";
+//}
+
+//foreach ($files['name'] as $tmp_file) {
+//	echo ("update file name:");
+//}
 
 if ($error === false) {
 	OCP\JSON::encodedPrint($result);
 } else {
 	OCP\JSON::error(array(array('data' => array_merge(array('message' => $error, 'code' => $errorCode), $storageStats))));
 }
+
