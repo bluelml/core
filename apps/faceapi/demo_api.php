@@ -8,7 +8,7 @@
     Note: must have PHP Version ^5.5 and enable cUrl module.
 */
 
-require_once("conf.php");
+
 
 
 /*
@@ -22,19 +22,20 @@ Use PHP cUrl module to Post data / file to url
 function postData($url,$data=array(),$upfile = false){
     $ch = curl_init();
     if($upfile){
-        curl_setopt($ch, CURLOPT_SAFE_UPLOAD, true);
+       // curl_setopt($ch, CURLOPT_SAFE_UPLOAD, true);
     }else{
         $data = http_build_query($data);
     }
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_HEADER, 0);
-    curl_setopt($ch, CURLOPT_TIMEOUT,10);
+    curl_setopt($ch, CURLOPT_TIMEOUT,20);
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS,$data );
 
     $output = curl_exec($ch);
     $errorCode = curl_errno($ch);
+    $info = curl_getinfo($ch);
     curl_close($ch);
 
     if(0 !== $errorCode) {
@@ -75,10 +76,11 @@ function getUrl($url){
 
 */
 function _get_api_url($api_name){
-    global $conf;
-    $api_Url = $conf["SERVER"] . $api_name;
-    $api_key = $conf['API_KEY'];
-    $api_secret = $conf['API_SECRET'];
+    include("/var/www/html/owncloud/apps/faceapi/conf.php");
+    //global $face_server_conf;
+    $api_Url = $face_server_conf["SERVER"] . $api_name;
+    $api_key = $face_server_conf['API_KEY'];
+    $api_secret = $face_server_conf['API_SECRET'];
 
     $api_Url .='?apikey=' . urlencode($api_key);
 
@@ -147,10 +149,17 @@ Detect all faces in one image
 function detect_face_local($image_path){
     $url = _get_api_url('facedetect');
     if(realpath($image_path) !== false){
-        $data = array('image' => new CURLFile(realpath($image_path)));
-        //var_dump($data);
-        $res_obj = postData($url,$data,true);
-        return ($res_obj);
+	if (version_compare(PHP_VERSION, '5.5.0') === -1) {
+            $data = array('image' => '@'.realpath($image_path));
+            //var_dump($data);
+            $res_obj = postData($url,$data,true);
+            return ($res_obj);
+        }else {
+            $data = array('image' => new CURLFile(realpath($image_path)));
+            //var_dump($data);
+            $res_obj = postData($url,$data,true);
+            return ($res_obj);
+}
     }else{
         return(false);
     }
