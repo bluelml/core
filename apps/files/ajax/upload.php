@@ -266,9 +266,9 @@ if (\OC\Files\Filesystem::isValidPath($dir) === true) {
                 $face_id = $face_json_result['faces'][$ii]['faceId'];
                 $person_result = identify_face($face_id);
                 $person_json_result = json_decode($person_result, true);
-                if($person_result['identified']==='True') {
+                if($person_result['identified']) {
                     //if the guy already there, link this face to the persion.
-                    $link_result = link_person_to_face($person_result, $face_id);
+                    $link_result = link_person_to_face($person_result['personId'], $face_id);
                 }
                 else {
                     //can't find the person, create a person id with "??"+"random number"
@@ -277,8 +277,9 @@ if (\OC\Files\Filesystem::isValidPath($dir) === true) {
                     $person_rand = '??'.(string)$person_rand;
                     $person_add_result = add_person($person_rand);
                     $person_add_json_result =  json_decode($person_add_result, true);
-                    if($person_add_json_result['personId'])
-                        $link_result = link_person_to_face($person_add_json_result['person_id'], $face_id);
+                    //if($person_add_json_result['personId'] !== 'false')
+                    $personId =  $person_add_json_result['personId'];
+                        $link_result = link_person_to_face($personId, $face_id);
                         //TODO: check the result
                 }     
             }
