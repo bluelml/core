@@ -292,15 +292,6 @@ if (\OC\Files\Filesystem::isValidPath($dir) === true) {
 	$error = $l->t('Invalid directory.');
 }
 
-//$file_num = count($files['name']);
-//for ($i = 0; $i < $fileCount; $i++) {
-//    echo "update file name:" .$files['name'][$i] ."<br/>";
-//}
-
-//foreach ($files['name'] as $tmp_file) {
-//	echo ("update file name:");
-//}
-
 if ($error === false) {
 	OCP\JSON::encodedPrint($result);
 } else {
