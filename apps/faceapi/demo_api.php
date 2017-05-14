@@ -19,7 +19,7 @@ Use PHP cUrl module to Post data / file to url
 :return :if success,  Server response
          on error, false
 */
-function postData($url,$data=array(),$upfile = false){
+function postData($url,$data,$upfile){
     $ch = curl_init();
     if($upfile){
        // curl_setopt($ch, CURLOPT_SAFE_UPLOAD, true);
@@ -253,7 +253,7 @@ function link_person_to_face($person_id, $face_id){
     $url = _get_api_url('labelface');
     $data = array('faceId' => $face_id ,'personId' => $person_id);
 
-    $res_obj = postData($url, $data);
+    $res_obj = postData($url, $data,true);
     return ($res_obj);
 }
 
@@ -280,6 +280,47 @@ function find_person_labels($person_id){
 function api_detect_face($input_file) {
     $res_obj = detect_face_local($input_file);
     return($res_obj);
+}
+
+/*cut face*/
+function update_person_image($personID, $source_path, $cut_left,$cut_right, $cut_top, $cut_bottom)
+{
+$source_info = getimagesize($source_path);
+$source_width = $source_info[0];
+$source_height = $source_info[1];
+$source_mime = $source_info['mime'];
+$target_height = $target_width = 300;
+
+$cut_x = $cut_left;
+$cut_y = $cut_top;
+$cut_width = ($cut_right - $cut_left);
+$cut_height = ($cut_bottom - $cut_top );
+
+switch ($source_mime)
+{
+case 'image/gif':
+$source_image = imagecreatefromgif($source_path);
+break;
+
+case 'image/jpeg':
+$source_image = imagecreatefromjpeg($source_path);
+break;
+
+case 'image/png':
+$source_image = imagecreatefrompng($source_path);
+break;
+
+default:
+return false;
+break;
+}
+$target_image = imagecreatetruecolor($target_width, $target_height);
+
+imagecopyresampled($target_image, $source_image, 0,0, $cut_x, $cut_y, $target_width, $target_height, $cut_height, $cut_width);
+
+$fileName = $personID .".png";
+imagepng($target_image,'./'.$fileName);
+
 }
 
 ?>
