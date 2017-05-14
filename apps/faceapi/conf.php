@@ -1,7 +1,7 @@
 <?php
-$face_server_conf = array(
-        "SERVER" => "http://119.23.74.1/api/",
-        "API_KEY"=> "testkey",
-        "API_SECRET"=> "null"
+    $conf = array(
+        "SERVER" => "http://",
+        "API_KEY"=> "",
+        "API_SECRET"=> ""
     );
 ?>
