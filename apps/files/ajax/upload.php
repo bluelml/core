@@ -266,10 +266,14 @@ if (\OC\Files\Filesystem::isValidPath($dir) === true) {
                 $face_id = $face_json_result['faces'][$ii]['faceId'];
                 $person_result = identify_face($face_id);
                 $person_json_result = json_decode($person_result, true);
-                if($person_result['identified']) {
+                if($person_json_result['identified']) {
                     //if the guy already there, link this face to the persion.
-                    $link_result = link_person_to_face($person_result['personId'], $face_id);
-                    update_person_image($person_result['personId'],$face_filename,$face_json_result['faces'][$ii]['left'],$face_json_result['faces'][$ii]['right'],$face_json_result['faces'][$ii]['top'],$face_json_result['faces'][$ii]['bottom']);
+                    $link_result = link_person_to_face($person_json_result['personId'], $face_id);
+                    update_person_image($person_json_result['personId'],
+                                        $face_filename,$face_json_result['faces'][$ii]['left'],
+                                        $face_json_result['faces'][$ii]['right'],
+                                        $face_json_result['faces'][$ii]['top'],
+                                        $face_json_result['faces'][$ii]['bottom']);
                 }
                 else {
                     //can't find the person, create a person id with "??"+"random number"
@@ -281,7 +285,11 @@ if (\OC\Files\Filesystem::isValidPath($dir) === true) {
                     //if($person_add_json_result['personId'] !== 'false')
                     $personId =  $person_add_json_result['personId'];
                         $link_result = link_person_to_face($personId, $face_id);
-                        update_person_image($person_result['personId'],$face_filename,$face_json_result['faces'][$ii]['left'],$face_json_result['faces'][$ii]['right'],$face_json_result['faces'][$ii]['top'],$face_json_result['faces'][$ii]['bottom']);
+                        update_person_image($personId,$face_filename,
+                        $face_json_result['faces'][$ii]['left'],
+                        $face_json_result['faces'][$ii]['right'],
+                        $face_json_result['faces'][$ii]['top'],
+                        $face_json_result['faces'][$ii]['bottom']);
                         //TODO: check the result
                 }     
             }
