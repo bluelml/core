@@ -77,6 +77,24 @@ return [
 			'url'  => '/files/list',
 			'verb' => 'GET'
 		],
+        // The list of thumbnails of persons' face
+        [
+            'name' => 'files#face_suggest',
+            'url'  => '/files/suggest/{key}',
+            'verb' => 'GET'            
+        ],
+        // The list of one person's image
+        [
+            'name' => 'files#person_list',
+            'url'  => '/files/person/{name}',
+            'verb' => 'GET'            
+        ],
+        // Set person's name
+        [
+            'name' => 'files#set_name',
+            'url'  => '/files/setName/{oldName}/{newName}',
+            'verb' => 'GET'            
+        ],        
 		// File download
 		[
 			'name'     => 'files#download',
@@ -165,5 +183,23 @@ return [
 			'url'  => '/api/gallery/{folderId}',
 			'verb' => 'GET'
 		],
+        // The list of thumbnails of persons' face
+        [
+            'name' => 'files_api#face_suggest',
+            'url'  => '/api/files/suggest/{key}',
+            'verb' => 'GET'            
+        ],
+        // The list of one person's image
+        [
+            'name' => 'files_api#person_list',
+            'url'  => '/api/files/person/{name}',
+            'verb' => 'GET'            
+        ],
+        // Set person's name
+        [
+            'name' => 'files_api#set_name',
+            'url'  => '/api/files/setName/{oldName}/{newName}',
+            'verb' => 'GET'            
+        ], 
 	]
 ];
