@@ -101,9 +101,9 @@ style(
 	<div id="file_action_panel"></div>
 	<span class="right">
         <div id="face-suggest">
-            <input id="face-input" type="search" placeholder="Search" onkeyup="showSuggest(this.value)" onclick="getSearch(this.value)" /> 
-            <input type="button" name="s" value="Search" onclick="getSearch(this.value)" />
-        </div> 
+            <input id="face-input" type="search"  placeholder="Search" /> 
+            <input id="face-button" type="button" name="s" value="Search"  />
+        </div>     
 		<!-- sharing button -->   
         <div id="share-button" class="button">
 			<img class="svg" src="<?php print_unescaped(

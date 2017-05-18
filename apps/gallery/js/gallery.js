@@ -158,6 +158,25 @@
 			Gallery.view.viewAlbum(Gallery.currentAlbum);
 		},
 
+        /*request searching*/
+        getSearch: function () {
+            // Sends the request to the server
+ 
+            var baseUrl = OC.generateUrl('apps/gallery/files/suggest/');
+            $.ajax ({
+                type: 'GET',
+                url: baseUrl + $('#face-input').val() + '?' + "search=" + $('#face-input').val(),
+                dataType : 'json', 
+                success : function(data){
+                   alert(data.message); 
+                },
+                error : function(data) {
+                    alert(data.success);         
+                }
+                
+            }); 
+            
+        },
 		/**
 		 * Switches to the Files view
 		 *

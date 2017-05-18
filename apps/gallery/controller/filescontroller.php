@@ -100,7 +100,19 @@ class FilesController extends Controller {
 			return $this->jsonError($exception, $this->request, $this->logger);
 		}
 	}
+    /*According to key to find face*/
+        public function facesuggest($search) {
 
+        header('Content-type:text/json');
+        $result = array(
+        'message'=>$search,
+        'success'=>true
+        );
+         $result = json_encode($result);
+        echo $result;
+        exit;
+    }
+    
 	/**
 	 * @NoAdminRequired
 	 *
