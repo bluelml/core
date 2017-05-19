@@ -100,19 +100,7 @@ class FilesController extends Controller {
 			return $this->jsonError($exception, $this->request, $this->logger);
 		}
 	}
-    /*According to key to find face*/
-        public function facesuggest($search) {
 
-        header('Content-type:text/json');
-        $result = array(
-        'message'=>$search,
-        'success'=>true
-        );
-         $result = json_encode($result);
-        echo $result;
-        exit;
-    }
-    
 	/**
 	 * @NoAdminRequired
 	 *
@@ -145,5 +133,64 @@ class FilesController extends Controller {
 
 		return new ImageResponse($download);
 	}
+    
+        /**
+     * @NoAdminRequired
+     *
+     * Sends the face thumbnails
+     *
+     * @param
+     * @param 
+     *
+     * @return ImageResponse
+     */                             
+    public function face_suggest($key) {
+        //$featuresArray = explode(';', $features);
+        //$mediaTypesArray = explode(';', $mediatypes);
+        try {
+            return $this->getFaceThumbnails($key);
+        } catch (\Exception $exception) {
+            return $this->jsonError($exception, $this->request, $this->logger);
+        }    
+    }
+    
+        /**
+     * @NoAdminRequired
+     *
+     * Sends one person's whlole iamges
+     *
+     * @param 
+     * @param 
+     *
+     * @return ImageResponse
+     */
+    public function person_list($name) {
+        //$featuresArray = explode(';', $features);
+        //$mediaTypesArray = explode(';', $mediatypes);
+        try {
+            return $this->getPersonImages($name);
+        } catch (\Exception $exception) {
+            return $this->jsonError($exception, $this->request, $this->logger);
+        }    
+    }
 
+    /**
+     * @NoAdminRequired
+     *
+     * Set one person's name
+     *
+     * @param 
+     * @param 
+     *
+     * @return ImageResponse
+     */
+    public function set_name($oldName, $newName) {
+        //$featuresArray = explode(';', $features);
+        //$mediaTypesArray = explode(';', $mediatypes);
+        try {
+            return $this->setPersonName($oldNmae, $newName);
+        } catch (\Exception $exception) {
+            return $this->jsonError($exception, $this->request, $this->logger);
+        }    
+    }
 }

@@ -135,4 +135,63 @@ class FilesApiController extends ApiController {
 		return new ImageResponse($download);
 	}
 
+            /**
+     * @NoAdminRequired
+     *
+     * Sends the face thumbnails
+     *
+     * @param
+     * @param 
+     *
+     * @return ImageResponse
+     */                             
+    public function face_suggest($key) {
+        //$featuresArray = explode(';', $features);
+        //$mediaTypesArray = explode(';', $mediatypes);
+        try {
+            return $this->getFaceThumbnails($key);
+        } catch (\Exception $exception) {
+            return $this->jsonError($exception, $this->request, $this->logger);
+        }    
+    }
+    
+        /**
+     * @NoAdminRequired
+     *
+     * Sends one person's whlole iamges
+     *
+     * @param 
+     * @param 
+     *
+     * @return ImageResponse
+     */
+    public function person_list($name) {
+        //$featuresArray = explode(';', $features);
+        //$mediaTypesArray = explode(';', $mediatypes);
+        try {
+            return $this->getPersonImages($name);
+        } catch (\Exception $exception) {
+            return $this->jsonError($exception, $this->request, $this->logger);
+        }    
+    }
+
+    /**
+     * @NoAdminRequired
+     *
+     * Set one person's name
+     *
+     * @param 
+     * @param 
+     *
+     * @return ImageResponse
+     */
+    public function set_name($oldNmae, $newName) {
+        //$featuresArray = explode(';', $features);
+        //$mediaTypesArray = explode(';', $mediatypes);
+        try {
+            return $this->getPersonImages($oldNmae, $newName);
+        } catch (\Exception $exception) {
+            return $this->jsonError($exception, $this->request, $this->logger);
+        }    
+    }
 }
