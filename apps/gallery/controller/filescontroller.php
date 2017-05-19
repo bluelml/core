@@ -144,7 +144,7 @@ class FilesController extends Controller {
      *
      * @return ImageResponse
      */                             
-    public function face_suggest($key) {
+    public function faceSuggest($key) {
         //$featuresArray = explode(';', $features);
         //$mediaTypesArray = explode(';', $mediatypes);
         try {
@@ -164,7 +164,7 @@ class FilesController extends Controller {
      *
      * @return ImageResponse
      */
-    public function person_list($name) {
+    public function personList($name) {
         //$featuresArray = explode(';', $features);
         //$mediaTypesArray = explode(';', $mediatypes);
         try {
@@ -184,7 +184,7 @@ class FilesController extends Controller {
      *
      * @return ImageResponse
      */
-    public function set_name($oldName, $newName) {
+    public function setName($oldName, $newName) {
         //$featuresArray = explode(';', $features);
         //$mediaTypesArray = explode(';', $mediatypes);
         try {

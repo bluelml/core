@@ -139,5 +139,23 @@ class PreviewController extends Controller {
 
 		return new ImageResponse($preview, $status);
 	}
+    
+    
+    public function getPersonThumbnails($ids, $square, $scale) {
+        $idsArray = explode(';', $ids);
+
+        foreach ($idsArray as $id) {
+            // Casting to integer here instead of using array_map to extract IDs from the URL
+            list($thumbnail, $status) = $this->getThumbnail((int)$id, $square, $scale);
+            $thumbnail['fileid'] = $id;
+            $thumbnail['status'] = $status;
+
+            $this->eventSource->send('preview', $thumbnail);
+        }
+        $this->eventSource->close();
+
+        $this->exitController();
+        // @codeCoverageIgnoreStart
+    } 
 
 }

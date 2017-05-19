@@ -283,9 +283,9 @@ function api_detect_face($input_file) {
 }
 
 /*cut face*/
-function update_person_image($personID, $source_path, $cut_left,$cut_right, $cut_top, $cut_bottom)
+function update_person_image($personID, $source_file, $cut_left,$cut_right, $cut_top, $cut_bottom)
 {
-$source_info = getimagesize($source_path);
+$source_info = getimagesize($source_file);
 $source_width = $source_info[0];
 $source_height = $source_info[1];
 $source_mime = $source_info['mime'];
@@ -298,31 +298,85 @@ $cut_height = ($cut_bottom - $cut_top );
 
 switch ($source_mime)
 {
-case 'image/gif':
-$source_image = imagecreatefromgif($source_path);
-break;
+    case 'image/gif':
+        $source_image = imagecreatefromgif($source_file);
+    break;
 
-case 'image/jpeg':
-$source_image = imagecreatefromjpeg($source_path);
-break;
+    case 'image/jpeg':
+        $source_image = imagecreatefromjpeg($source_file);
+    break;
 
-case 'image/png':
-$source_image = imagecreatefrompng($source_path);
-break;
+    case 'image/png':
+        $source_image = imagecreatefrompng($source_file);
+    break;
 
-default:
-return false;
-break;
+    default:
+        return false;
+    
 }
 $target_image = imagecreatetruecolor($target_width, $target_height);
 
-imagecopyresampled($target_image, $source_image, 0,0, $cut_x, $cut_y, $target_width, $target_height, $cut_height, $cut_width);
+imagecopyresampled($target_image, $source_image, 0,0, $cut_x, $cut_y, 
+                   $target_width, $target_height, $cut_height, $cut_width);
 
 $fileName = $personID .".png";
 $loacl_file_dir="/var/www/html/owncloud/data/admin/files";
+
+//this functin should be chagne, if there is alread a same file
 imagepng($target_image,$loacl_file_dir.'./'.$fileName);
 
 }
 
+
+
+$loacl_file_dir='/var/www/html/owncloud/data/admin/files';
+
+/*find the person's face image, the file should be personId.face.jpg*/
+function getFaceFileList($dir, $ext="face.png"){   
+    $dp = opendir($dir);
+    $fileArr = array();
+    while (!false == $curFile = readdir($dp)) {
+        if ($curFile!="." && $curFile!=".." && $curFile!="") {
+            //the system need whole path
+            if (is_dir($dir."/".$curFile)) {
+               $fileArr = getFaceFileList($dir."/".$curFile);
+            } else {
+                $file_parts = explode('.',$file); 
+                $file_ext1 = strtolower(array_pop($file_parts));
+                $file_ext2 = strtolower(array_pop($file_parts));  
+                if ($file_ext1 === 'png' && $file_ext2 === 'face') {
+                    array_push($fileArr, $file); 
+                }                                                                     
+            }
+        }
+    }
+    closedir($dir);
+    return $fileArr;
+}
+
+/*get the json file which include persinID, name and files*/
+function getPersonJson($dir, $name){
+    $dp = opendir($dir);
+    //$fileArr = array();
+    $file = "";
+    while (!false == $curFile = readdir($dp)) {
+        if ($curFile!="." && $curFile!=".." && $curFile!="") {
+            if (is_dir($dir."/".$curFile)) {
+               if($file = getPersonJson($dir."/".$curFile) != "") {
+                    closedir($dir);
+                    return $file;
+               }                              
+            } else {
+                if ($curFile === $name.".person.json") {
+                    $file = $dir.$curfile;
+                    closedir($dir);
+                    return $file;
+                }                                                                     
+            }
+        }
+    }
+    
+    return $file;
+}
 
 ?>

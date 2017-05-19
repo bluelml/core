@@ -25,6 +25,10 @@ use OCA\Gallery\Service\ConfigService;
 use OCA\Gallery\Service\SearchMediaService;
 use OCA\Gallery\Service\DownloadService;
 
+
+
+
+
 /**
  * Trait Files
  *
@@ -151,4 +155,48 @@ trait Files {
 		return $download;
 	}
 
+    /**
+     * Returns a list of all face thumbnails
+     *
+     * @param 
+     * @param 
+     *
+     * @return array|false
+     */   
+    private function getFaceThumbnails($key) {
+        require_once '/var/www/html/owncloud/apps/faceapi/demo_api.php';
+        $filesA = array();         
+        $filesB = array();
+        $files_temp1 = getFaceFileList($loacl_file_dir);
+        
+        if (strlen($key) > 0) {
+            //$hint="";
+            for($i=0; $i<count($file_temp); $i++) {
+                if (strtolower($key) == strtolower(substr($file_temp[$i],0,strlen($key)))) {
+                    array_push($filesA, $file_temp[$i]);
+                } else if (substr($file_temp[$i],0,2) == "??"){
+                    array_push($filesB, $file_temp[$i]);
+                }
+            }
+        }
+        
+        if($key == "")
+            return $filesB;    //only return untagged image
+        else
+            return  array_push($filesA, $filesB);  //return key image and untagged image
+    }
+    
+    /**
+     * Returns a list of one person's whole images
+     *
+     * @param 
+     * @param 
+     *
+     * @return array|false
+     */
+    private function getPersonImageList($name) {
+        //$files = array();
+        return $files = getPersonJson($loacl_file_dir, $name);
+        
+    }
 }
