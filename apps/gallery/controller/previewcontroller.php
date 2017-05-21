@@ -141,12 +141,12 @@ class PreviewController extends Controller {
 	}
     
     
-    public function getPersonThumbnails($ids, $square, $scale) {
-        $idsArray = explode(';', $ids);
-
-        foreach ($idsArray as $id) {
+    public function getFaceThumbnails($files) {
+        //$idsArray = explode(';', $ids); 
+        //foreach ($fileArray as $id) {
+            foreach ($files as $file) {
             // Casting to integer here instead of using array_map to extract IDs from the URL
-            list($thumbnail, $status) = $this->getThumbnail((int)$id, $square, $scale);
+            list($thumbnail, $status) = $this->getFaceThumbnail($file);
             $thumbnail['fileid'] = $id;
             $thumbnail['status'] = $status;
 

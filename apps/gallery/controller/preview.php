@@ -222,5 +222,20 @@ trait Preview {
 
 		return $thumbnail;
 	}
+    
+    private function getFaceThumbnail($file) {
+        require_once '/var/www/html/owncloud/apps/faceapi/demo_api.php';
+        $thumbnail = [];
+        $image = getFaceImage($loacl_file_dir, $file);
+        if($image) {           
+            $fp = fopen($image, 'rb', 0);
+            $thumbnail = base64_encode(fread($fp, filesize($fp)));
+            fclose($fp);
+            return [$thumbnail, "OK"];
+        }
+        else {
+            return [$thumbnail, "ERROR"];
+        }
+    }
 
 }

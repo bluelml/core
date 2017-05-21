@@ -396,4 +396,27 @@ function tagPerson($dir, $oldName, $newName){
     return false;        
 }
 
+/*return the thumbnail*/
+function getFaceImage($dir, $file) {
+    $dp = opendir($dir);
+    $thumbnail = "";
+    while (!false == $curFile = readdir($dp)) {
+        if ($curFile!="." && $curFile!=".." && $curFile!="") {
+            if (is_dir($dir."/".$curFile)) {
+               if($file = getFaceImage($dir."/".$curFile) != "") {
+                    closedir($dir);
+                    return $curFile;
+               }                              
+            } else {
+                if ($curFile === $file) {                    
+                    closedir($dir);
+                    return $curFile;
+                }                                                                     
+            }    
+        }
+    }
+    
+    return $thumbnail; 
+}
+
 
