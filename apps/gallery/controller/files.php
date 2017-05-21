@@ -196,7 +196,23 @@ trait Files {
      */
     private function getPersonImageList($name) {
         //$files = array();
+        require_once '/var/www/html/owncloud/apps/faceapi/demo_api.php';
         return $files = getPersonJson($loacl_file_dir, $name);
+        
+    }
+    
+    /**
+     * tag the person
+     *
+     * @param 
+     * @param 
+     *
+     * @return array|false
+     */
+    private function setPersonName($oldName, $newName) {
+        //$files = array();
+        require_once '/var/www/html/owncloud/apps/faceapi/demo_api.php';
+        return $files = tagPerson($loacl_file_dir, $oldName, $newName);
         
     }
 }
