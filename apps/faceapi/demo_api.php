@@ -337,15 +337,15 @@ function getFaceFileList($dir, $ext="face.png"){
     $fileArr = array();
     while (!false == $curFile = readdir($dp)) {
         if ($curFile!="." && $curFile!=".." && $curFile!="") {
-            //the system need whole path
+            //the system need whole path or realpath($curFile)
             if (is_dir($dir."/".$curFile)) {
-               $fileArr = getFaceFileList($dir."/".$curFile);
+               $fileArr = array_merge($fileArr, getFaceFileList($dir."/".$curFile));
             } else {
-                $file_parts = explode('.',$file); 
+                $file_parts = explode('.',$curFile); 
                 $file_ext1 = strtolower(array_pop($file_parts));
                 $file_ext2 = strtolower(array_pop($file_parts));  
                 if ($file_ext1 === 'png' && $file_ext2 === 'face') {
-                    array_push($fileArr, $file); 
+                    array_push($fileArr, $curFile); 
                 }                                                                     
             }
         }
@@ -364,13 +364,13 @@ function getPersonJson($dir, $name){
             if (is_dir($dir."/".$curFile)) {
                if($file = getPersonJson($dir."/".$curFile) != "") {
                     closedir($dir);
-                    return $file;
+                    return $curFile;
                }                              
             } else {
                 if ($curFile === $name.".person.json") {
                     $file = $dir.$curfile;
                     closedir($dir);
-                    return $file;
+                    return $curFile;
                 }                                                                     
             }
         }
@@ -379,4 +379,21 @@ function getPersonJson($dir, $name){
     return $file;
 }
 
-?>
+/*with default the person is "??xxxx", */
+function tagPerson($dir, $oldName, $newName){
+    $personJson = getPersonJson($dir, $oldName);
+    if ($personJson !== "") 
+        rename($oldName.".person.json", $newName.".person.json");                 
+    else
+        return false;
+        
+    $js = file_get_contents($newName.".person.json");
+    $js = json_decode($js);
+        
+    if(add_person($newName, $js[$presonId]))
+       return true;
+       
+    return false;        
+}
+
+
