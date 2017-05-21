@@ -89,12 +89,12 @@ return [
             'url'  => '/files/person/{name}',
             'verb' => 'GET'            
         ],
-        //get person thunbnails. show all the person's images.
+        // get face thumbnails
         [
-            'name' => 'preview#get_person_thumbnails',
-            'url'  => '/presonThumbnails/{name}',
+            'name' => 'preview#get_face_thumbnails',
+            'url'  => '/faceThumbnails/{files}',
             'verb' => 'GET'
-        ], 
+        ],  
         // Set person's name
         [
             'name' => 'files#set_name',
@@ -210,7 +210,7 @@ return [
         // get face thumbnails
         [
             'name' => 'preview_api#get_face_thumbnails',
-            'url'  => '/api/faceThumbnails/{fileId}',
+            'url'  => '/api/faceThumbnails/{files}',
             'verb' => 'GET'
         ],          
 	]
