@@ -167,15 +167,15 @@ trait Files {
         require_once '/var/www/html/owncloud/apps/faceapi/demo_api.php';
         $filesA = array();         
         $filesB = array();
-        $files_temp1 = getFaceFileList($loacl_file_dir);
+        $files_temp = getFaceFileList($loacl_file_dir);
         
         if (strlen($key) > 0) {
             //$hint="";
-            for($i=0; $i<count($file_temp); $i++) {
-                if (strtolower($key) == strtolower(substr($file_temp[$i],0,strlen($key)))) {
-                    array_push($filesA, $file_temp[$i]);
-                } else if (substr($file_temp[$i],0,2) == "??"){
-                    array_push($filesB, $file_temp[$i]);
+            for($i=0; $i<count($files_temp); $i++) {
+                if (strtolower($key) == strtolower(substr($files_temp[$i],0,strlen($key)))) {
+                    array_push($filesA, $files_temp[$i]);
+                } else if (substr($files_temp[$i],0,2) == "??"){
+                    array_push($filesB, $files_temp[$i]);
                 }
             }
         }

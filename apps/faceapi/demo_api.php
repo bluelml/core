@@ -350,7 +350,7 @@ function getFaceFileList($dir, $ext="face.png"){
             }
         }
     }
-    closedir($dir);
+    closedir($dp);
     return $fileArr;
 }
 
@@ -363,13 +363,13 @@ function getPersonJson($dir, $name){
         if ($curFile!="." && $curFile!=".." && $curFile!="") {
             if (is_dir($dir."/".$curFile)) {
                if($file = getPersonJson($dir."/".$curFile) != "") {
-                    closedir($dir);
+                    closedir($dp);
                     return $curFile;
                }                              
             } else {
                 if ($curFile === $name.".person.json") {
                     $file = $dir.$curfile;
-                    closedir($dir);
+                    closedir($dp);
                     return $curFile;
                 }                                                                     
             }
@@ -404,12 +404,12 @@ function getFaceImage($dir, $file) {
         if ($curFile!="." && $curFile!=".." && $curFile!="") {
             if (is_dir($dir."/".$curFile)) {
                if($file = getFaceImage($dir."/".$curFile) != "") {
-                    closedir($dir);
+                    closedir($dp);
                     return $curFile;
                }                              
             } else {
                 if ($curFile === $file) {                    
-                    closedir($dir);
+                    closedir($dp);
                     return $curFile;
                 }                                                                     
             }    
