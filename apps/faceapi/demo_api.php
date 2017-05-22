@@ -390,7 +390,7 @@ function tagPerson($dir, $oldName, $newName){
     $js = file_get_contents($newName.".person.json");
     $js = json_decode($js);
         
-    if(add_person($newName, $js[$presonId]))
+    if(add_person($newName, $js["personId"]))
        return true;
        
     return false;        
