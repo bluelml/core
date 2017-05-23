@@ -168,10 +168,10 @@
                 url: baseUrl + $('#face-input').val() + '?' + "search=" + $('#face-input').val(),
                 dataType : 'json', 
                 success : function(data){
-                   alert(data.message); 
+                   alert(data); 
                 },
                 error : function(data) {
-                    alert(data.success);         
+                    alert(data);         
                 }
                 
             }); 

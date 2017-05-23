@@ -170,3 +170,15 @@ http://davidwalsh.name/css-flip*/
 	-moz-transform: rotateX(180deg);
 	transform: rotateX(180deg);
 }
+
+#controls .control {
+    float: left;
+    display: inline;
+    border-radius: 3px 0 0 3px;
+    margin-left: 0px;
+    margin-right: 3px;
+    margin-top :5px;
+    border-right: 0;
+    border-right: 1px solid rgba(216, 216, 216, 0.9);
+    
+}

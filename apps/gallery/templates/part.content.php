@@ -99,18 +99,19 @@ style(
 		</div>
 	</div>
 	<div id="file_action_panel"></div>
+
 	<span class="right">
-        <div id="face-suggest">
-            <input id="face-input" type="search"  placeholder="Search" /> 
-            <input id="face-button" type="button" name="s" value="Search"  />
-        </div>     
+    <div class="control">
+        <input id="face-input" type="search"  placeholder="Search" /> 
+        <input id="face-button" type="button" name="s" value="Search"  />
+    </div>     
 		<!-- sharing button -->   
         <div id="share-button" class="button">
 			<img class="svg" src="<?php print_unescaped(
 				image_path('core', 'actions/share.svg')
 			); ?>" alt="<?php p($l->t("Share")); ?>"/>
 		</div>
-		<a class="share" data-item-type="folder" data-item=""
+		<a class="share " data-item-type="folder" data-item=""
 		   title="<?php p($l->t("Share")); ?>"
 		   data-possible-permissions="31"></a>
 		<!-- info button -->
