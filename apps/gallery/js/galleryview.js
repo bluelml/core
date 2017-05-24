@@ -322,7 +322,7 @@
 			$('#sort-name-button').click(Gallery.sorter);
 			$('#sort-date-button').click(Gallery.sorter);
             $('#face-input').keyup(Gallery.getSearch);
-            $('#face-button').click(Gallery.getSearch)
+            $('#face-button').click(Gallery.getSearch);
 			$('#save #save-button').click(Gallery.showSaveForm);
 			$('.save-form').submit(Gallery.saveForm);
 			this._renderNewButton();
