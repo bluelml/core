@@ -319,7 +319,7 @@ $target_image = imagecreatetruecolor($target_width, $target_height);
 imagecopyresampled($target_image, $source_image, 0,0, $cut_x, $cut_y, 
                    $target_width, $target_height, $cut_height, $cut_width);
 
-$fileName = $personID .".png";
+$fileName = $personID .".face.png";
 $loacl_file_dir="/var/www/html/owncloud/data/admin/files";
 
 //this functin should be chagne, if there is alread a same file
@@ -331,7 +331,7 @@ imagepng($target_image,$loacl_file_dir.'/'.$fileName);
 
 $loacl_file_dir='/var/www/html/owncloud/data/admin/files';
 
-/*find the person's face image, the file should be personId.face.jpg*/
+/*find the person's face image, the file should be personId.face.png*/
 function getFaceFileList($dir, $ext="face.png"){   
     $dp = opendir($dir);
     $fileArr = array();
