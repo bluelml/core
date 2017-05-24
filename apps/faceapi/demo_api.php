@@ -323,7 +323,7 @@ $fileName = $personID .".png";
 $loacl_file_dir="/var/www/html/owncloud/data/admin/files";
 
 //this functin should be chagne, if there is alread a same file
-imagepng($target_image,$loacl_file_dir.'./'.$fileName);
+imagepng($target_image,$loacl_file_dir.'/'.$fileName);
 
 }
 
@@ -363,19 +363,20 @@ function getPersonJson($dir, $name){
         if ($curFile!="." && $curFile!=".." && $curFile!="") {
             if (is_dir($dir."/".$curFile)) {
                if($file = getPersonJson($dir."/".$curFile) != "") {
-                    closedir($dir);
+                    closedir(Sdp);
                     return $curFile;
                }                              
             } else {
                 if ($curFile === $name.".person.json") {
                     $file = $dir.$curfile;
-                    closedir($dir);
+                    closedir($dp);
                     return $curFile;
                 }                                                                     
             }
         }
     }
     
+    closedir($dp);
     return $file;
 }
 
@@ -419,4 +420,96 @@ function getFaceImage($dir, $file) {
     return $thumbnail; 
 }
 
-
+/*create, add, delete file from/to personId.person.json*/
+/* 
+{
+    "personId" : "xxx string",
+    "files"    : [ "xx1.person.json", "xx2.person.json", "xx3.person.json"]                                 
+}
+*/  
+function api_add_person_file ($path, $name, $personId, $mode) {
+    $person_file = dirname($path);
+    $person_file = $person_file."/".$name.".person.json";
+    switch ($mode) {
+        //ceate xxx.person.json
+        case 0:             
+            $fp = fopen($person_file, "w+");
+            if (!is_writable($person_file)) {
+                return false;
+            }
+            
+            $data = array('personId' => $personId, 'files' => array());
+            $data = json_encode($data);
+            fwrite($fp, $data); 
+            fclose($fp);
+            api_add_person_file($path, $name, $personId, 1);
+            break;
+            
+        //add image file to xxx.person.json 
+        case 1:
+            $json = file_get_contents($person_file);
+            
+            //create new file
+            if(!$json) {
+               api_add_person_file($path, $name, $personId, 0);
+               $json = file_get_contents($person_file); 
+            }
+               
+            $json = json_decode($json, true);                       
+            if ($personId != $json['personId'])
+                return false;
+                
+            //the file is already here.
+            if(in_array($path, $json['files']))
+                return true;
+            
+            //$tmp =  ($json['files']);
+            array_push($json['files'], $path);
+            //array_push($json['files'], $path);
+              
+            $json = json_encode($json);
+            file_put_contents($person_file, $json);                        
+            break;             
+          
+        //remove image file from xxx.person.json
+        //delete xxx.person.json if there is no image file.
+        case 2:
+            $json = file_get_contents($person_file);
+            $json = json_decode($json, true);
+            if ($personId != $json['personId']) 
+                return false;         
+                   
+            $file_count = count($json['files']);
+            if (!$file_count) {
+                 unlink($person_file);
+                 return true;
+            }
+            
+            $index = array_search($path, $json['files']);
+            if ($index !== false)
+                array_splice($json['files'], $index, 1);
+                
+            
+            /*for ($ii=0; $ii<$file_count; $ii++) {
+                if ($json['files'][$ii][$fileName] == $person_file) {
+                    unset($json['files'][$ii]);
+                    array_values($json);
+                    break;                   
+                } 
+            }               
+            if ($ii == 0) {
+                unlink($person_file);
+                return true;
+            } */
+                
+            $json = json_encode($json);
+            file_put_contents($person_file, $json);            
+            break;
+            
+        default:
+            return false;    
+    }
+    
+    return true;
+    
+}

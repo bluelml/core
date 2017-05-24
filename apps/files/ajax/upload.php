@@ -250,7 +250,7 @@ if (\OC\Files\Filesystem::isValidPath($dir) === true) {
         //add code here to call face api.
         //local path = $dir + $relativePath
         $face_filename = $files['name'][$i];
-        $face_filename = $loacl_file_dir.$returnedDir.'/'.$face_filename;
+        $face_filename = $loacl_file_dir.'/'.$face_filename;
         //call face detect api to get *.json file.   
         if($face_result = api_detect_face($face_filename)) {
             $json_name = rtrim($face_filename, '.');
@@ -274,23 +274,29 @@ if (\OC\Files\Filesystem::isValidPath($dir) === true) {
                                         $face_json_result['faces'][$ii]['right'],
                                         $face_json_result['faces'][$ii]['top'],
                                         $face_json_result['faces'][$ii]['bottom']);
+                    //add this image to xxx.person.json                    
+                    api_add_person_file($face_filename, 
+                                        $person_json_result['name'], 
+                                        $person_json_result['personId'], 
+                                        1);                    
                 }
                 else {
                     //can't find the person, create a person id with "??"+"random number"
                     //we will change the person id later with the new tag.
-                    $person_rand = strtotime("now");
+                    $person_rand = strtotime("now") + rand();
                     $person_rand = '??'.(string)$person_rand;
                     $person_add_result = add_person($person_rand);
                     $person_add_json_result =  json_decode($person_add_result, true);
-                    //if($person_add_json_result['personId'] !== 'false')
-                    $personId =  $person_add_json_result['personId'];
-                        $link_result = link_person_to_face($personId, $face_id);
-                        update_person_image($personId,$face_filename,
-                        $face_json_result['faces'][$ii]['left'],
-                        $face_json_result['faces'][$ii]['right'],
-                        $face_json_result['faces'][$ii]['top'],
-                        $face_json_result['faces'][$ii]['bottom']);
-                        //TODO: check the result
+                    //if($person_add_json_result['personId'] !== 'false')                                        
+                    $personId =  $person_add_json_result['personId'];                          
+                    $link_result = link_person_to_face($personId, $face_id);
+                    update_person_image($personId, $face_filename,
+                                        $face_json_result['faces'][$ii]['left'],
+                                        $face_json_result['faces'][$ii]['right'],
+                                        $face_json_result['faces'][$ii]['top'],
+                                        $face_json_result['faces'][$ii]['bottom']);
+                    //create new ??xxx.person.json
+                    api_add_person_file($face_filename, $person_rand, $personId, 0);                                        
                 }     
             }
             
