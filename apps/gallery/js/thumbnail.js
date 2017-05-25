@@ -156,6 +156,7 @@ function Thumbnail (fileId, square) {
 			return batch;
 		},
 
+
 		/**
 		 * Returns the link to the media type icon
 		 *

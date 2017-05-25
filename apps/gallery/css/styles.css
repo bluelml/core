@@ -81,7 +81,7 @@ div.crumb.last a {
 	position: relative;
 	overflow: hidden;
 	text-align: justify;
-	top: 45px;
+	top: 0px;
 	padding-bottom: 10px;
 	margin-bottom: 45px;
 	margin-top: 0;
@@ -355,4 +355,21 @@ http://www.bypeople.com/author/comatosed/*/
 
 .icon-loading-dark.small {
 	background-size: 16px;
+}
+
+#face_display.frame {
+    position: relative;
+    overflow: hidden;
+    text-align: justify;
+    top: 45px;
+    padding-bottom: 0px;
+    margin-bottom: 45px;
+    margin-top: 5px;
+}
+#footer {
+    background-color:rgba(36, 143, 216, 0.91);
+    color:white;
+    clear:both;
+    text-align:center;
+   padding:5px;          
 }

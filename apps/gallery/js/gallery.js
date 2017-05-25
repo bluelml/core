@@ -168,7 +168,9 @@
                 url: baseUrl + $('#face-input').val() + '?' + "search=" + $('#face-input').val(),
                 dataType : 'json', 
                 success : function(data){
-                   alert(data); 
+                    //alert(data);
+                    $('#face_display>img').remove();
+                    Gallery.get_face_imge(data); 
                 },
                 error : function(data) {
                     alert(data);         
@@ -176,6 +178,28 @@
                 
             }); 
             
+        },
+                /*received facelist and post faceimge request*/
+        get_face_imge: function(list) {
+            var face_list = list;
+            var i ;
+            if(face_list.length <= 0)
+                return false;
+            var params = {
+                face_list: face_list.join(';')
+            };
+            var url =Gallery.utility.buildGalleryUrl('faceThumbnails', '', params);
+            var eventSource = new Gallery.EventSource(url);
+                eventSource.listen('preview',function (/**{filesname, status, mimetype, preview}*/ preview) {   
+                    var bigImg = document.createElement("img");    
+                      bigImg.src=('data:' + preview.mimetype + ';base64,' + preview.preview); 
+                      var myDiv = document.getElementById('face_display'); 
+                      myDiv.appendChild(bigImg); 
+                   //$('#face_test').attr("src",('data:' + preview.mimetype + ';base64,' + preview.preview));                    
+                   //alert(preview.mimetype);
+                });
+             
+                
         },
 		/**
 		 * Switches to the Files view

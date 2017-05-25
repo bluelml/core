@@ -148,7 +148,8 @@ class FilesController extends Controller {
         //$featuresArray = explode(';', $features);
         //$mediaTypesArray = explode(';', $mediatypes);
         try {
-            return $this->getFaceThumbnails($key);
+            echo $this->getFaceThumbnails($key);
+            exit;
         } catch (\Exception $exception) {
             return $this->jsonError($exception, $this->request, $this->logger);
         }    
