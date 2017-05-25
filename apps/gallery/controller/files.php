@@ -165,6 +165,7 @@ trait Files {
      */   
     private function getFaceThumbnails($key) {
         require_once '/var/www/html/owncloud/apps/faceapi/demo_api.php';
+        //header('Content-type:text/json');
         $filesA = array();         
         $filesB = array();
         $files_temp = getFaceFileList($loacl_file_dir);
@@ -179,11 +180,16 @@ trait Files {
                 }
             }
         }
+        if(count($filesB) > 0)
+            array_push($filesA, $filesB);
         
+        $filesA=json_encode($filesA);
+        $filesB=json_encode($filesB);
         if($key == "")
             return $filesB;    //only return untagged image
         else
-            return  array_push($filesA, $filesB);  //return key image and untagged image
+            return $filesA; 
+              //return key image and untagged image
     }
     
     /**

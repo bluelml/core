@@ -92,7 +92,7 @@ return [
         // get face thumbnails
         [
             'name' => 'preview#get_face_thumbnails',
-            'url'  => '/faceThumbnails/{files}',
+            'url'  => '/faceThumbnails',
             'verb' => 'GET'
         ],  
         // Set person's name

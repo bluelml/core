@@ -226,12 +226,13 @@ trait Preview {
     private function getFaceThumbnail($file) {
         require_once '/var/www/html/owncloud/apps/faceapi/demo_api.php';
         $thumbnail = [];
+        $loacl_file_dir='/var/www/html/owncloud/data/admin/files';
         $image = getFaceImage($loacl_file_dir, $file);
         if($image) {           
             $fp = fopen($image, 'rb', 0);
-            $thumbnail = base64_encode(fread($fp, filesize($fp)));
+            $thumbnail['preview'] = base64_encode(fread($fp, filesize($image)));
             fclose($fp);
-            return [$thumbnail, "OK"];
+            return [$thumbnail, "OK",];
         }
         else {
             return [$thumbnail, "ERROR"];

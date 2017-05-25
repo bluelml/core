@@ -141,14 +141,19 @@ class PreviewController extends Controller {
 	}
     
     
-    public function getFaceThumbnails($files) {
-        //$idsArray = explode(';', $ids); 
+    public function getFaceThumbnails($face_list) {
+            $idsArray = explode(';', $face_list); 
         //foreach ($fileArray as $id) {
-            foreach ($files as $file) {
+            foreach ($idsArray as $file) {
             // Casting to integer here instead of using array_map to extract IDs from the URL
             list($thumbnail, $status) = $this->getFaceThumbnail($file);
-            $thumbnail['fileid'] = $id;
+            $file_parts = explode('.',$file); 
+            $file_ext1 = strtolower(array_pop($file_parts));
+            $file_ext2 = strtolower(array_pop($file_parts));
+            $file_ext3 = strtolower(array_pop($file_parts));
+            $thumbnail['filesname'] = $file_ext3;
             $thumbnail['status'] = $status;
+            $thumbnail['mimetype'] = "image/png";
 
             $this->eventSource->send('preview', $thumbnail);
         }

@@ -133,7 +133,13 @@ style(
 			); ?>" alt="<?php p($l->t('File list')); ?>"/>
 		</div>
 	</span>   
-</div>     
+</div>
+<div id="face_display" data-allow-public-upload="<?php p($_['publicUploadEnabled'])?>" class="frame"> 
+
+</div>  
+
+<div id="footer">
+</div>    
 <div id="gallery" data-allow-public-upload="<?php p($_['publicUploadEnabled'])?>" class="hascontrols"></div>    
 <div id="emptycontent" class="hidden"></div>         
 <input type="hidden" name="allowShareWithLink" id="allowShareWithLink" value="yes"/>

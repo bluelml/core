@@ -319,7 +319,7 @@ $target_image = imagecreatetruecolor($target_width, $target_height);
 imagecopyresampled($target_image, $source_image, 0,0, $cut_x, $cut_y, 
                    $target_width, $target_height, $cut_height, $cut_width);
 
-$fileName = $personID .".png";
+$fileName = $personID ."face.png";
 $loacl_file_dir="/var/www/html/owncloud/data/admin/files";
 
 //this functin should be chagne, if there is alread a same file
@@ -400,18 +400,19 @@ function tagPerson($dir, $oldName, $newName){
 /*return the thumbnail*/
 function getFaceImage($dir, $file) {
     $dp = opendir($dir);
+    $tmp = $file;
     $thumbnail = "";
     while (!false == $curFile = readdir($dp)) {
         if ($curFile!="." && $curFile!=".." && $curFile!="") {
             if (is_dir($dir."/".$curFile)) {
-               if($file = getFaceImage($dir."/".$curFile) != "") {
+               if($tmp = getFaceImage($dir."/".$curFile,$file)) {
                     closedir($dp);
-                    return $curFile;
+                    return $tmp;
                }                              
             } else {
                 if ($curFile === $file) {                    
                     closedir($dp);
-                    return $curFile;
+                    return ($dir."/".$curFile);
                 }                                                                     
             }    
         }
