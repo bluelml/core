@@ -165,11 +165,11 @@ class FilesController extends Controller {
      *
      * @return ImageResponse
      */
-    public function personList($name) {
-        //$featuresArray = explode(';', $features);
+    public function personList($personID) {
+        $$personArray = explode(';', $personID);
         //$mediaTypesArray = explode(';', $mediatypes);
         try {
-            return $this->getPersonImageList($name);
+            return $this->getPersonImageList($$personArray);
         } catch (\Exception $exception) {
             return $this->jsonError($exception, $this->request, $this->logger);
         }    

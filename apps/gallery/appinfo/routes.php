@@ -86,7 +86,7 @@ return [
         // The list of one person's image which previews can be generated        
         [
             'name' => 'files#person_list',
-            'url'  => '/files/person/{name}',
+            'url'  => '/files/person',
             'verb' => 'GET'            
         ],
         // get face thumbnails

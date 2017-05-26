@@ -169,7 +169,7 @@
                 dataType : 'json', 
                 success : function(data){
                     //alert(data);
-                    $('#face_display>img').remove();
+                    $('#face_display>input').remove();
                     Gallery.get_face_imge(data); 
                 },
                 error : function(data) {
@@ -191,8 +191,10 @@
             var url =Gallery.utility.buildGalleryUrl('faceThumbnails', '', params);
             var eventSource = new Gallery.EventSource(url);
                 eventSource.listen('preview',function (/**{filesname, status, mimetype, preview}*/ preview) {   
-                    var bigImg = document.createElement("img");    
-                      bigImg.src=('data:' + preview.mimetype + ';base64,' + preview.preview); 
+                    var bigImg = document.createElement("input");
+                      bigImg.type = "image";   
+                      bigImg.src=('data:' + preview.mimetype + ';base64,' + preview.preview);
+                      bigImg.id = preview.filesname; 
                       var myDiv = document.getElementById('face_display'); 
                       myDiv.appendChild(bigImg); 
                    //$('#face_test').attr("src",('data:' + preview.mimetype + ';base64,' + preview.preview));                    
@@ -200,6 +202,26 @@
                 });
              
                 
+        },
+        get_result: function(){
+            var personID = $(this).attr("id");
+            $(this).siblings().remove();
+            var params = {
+                personID: personID
+            };
+            var url =Gallery.utility.buildGalleryUrl('files', '/person', params);
+            $.ajax ({
+                type: 'GET',
+                url: url,
+                dataType : 'json', 
+                success : function(data){                    
+                    alert(data); 
+                },
+                error : function(data) {
+                    alert(data);         
+                }
+                
+            });
         },
 		/**
 		 * Switches to the Files view
