@@ -423,14 +423,14 @@ function getFaceImage($dir, $file) {
 
 /*create, add, delete file from/to personId.person.json*/
 /* 
-{
+{   "name"     : "name"
     "personId" : "xxx string",
     "files"    : [ "xx1.person.json", "xx2.person.json", "xx3.person.json"]                                 
 }
 */  
 function api_add_person_file ($path, $name, $personId, $mode) {
     $person_file = dirname($path);
-    $person_file = $person_file."/".$name.".person.json";
+    $person_file = $person_file."/".$personId.".person.json";
     switch ($mode) {
         //ceate xxx.person.json
         case 0:             

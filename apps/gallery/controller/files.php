@@ -180,9 +180,8 @@ trait Files {
                 }
             }
         }
-        if(count($filesB) > 0)
-            array_push($filesA, $filesB);
-        
+        if(count($filesB) > 0) 
+            $filesA=array_merge($filesA, $filesB);
         $filesA=json_encode($filesA);
         $filesB=json_encode($filesB);
         if($key == "")
