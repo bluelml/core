@@ -360,11 +360,15 @@ http://www.bypeople.com/author/comatosed/*/
 #face_display.frame {
     position: relative;
     overflow: hidden;
-    text-align: justify;
+    text-align: center;
     top: 45px;
     padding-bottom: 0px;
     margin-bottom: 45px;
     margin-top: 5px;
+}
+.face {
+    border-radius:15px;
+    border:2.5px solid rgba(255, 255, 255, .9);
 }
 #footer {
     background-color:rgba(36, 143, 216, 0.91);

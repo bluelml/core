@@ -134,7 +134,7 @@ style(
 		</div>
 	</span>   
 </div>
-<div id="face_display" data-allow-public-upload="<?php p($_['publicUploadEnabled'])?>" class="frame"> </div>  
+<div id="face_display" data-allow-public-upload="<?php p($_['publicUploadEnabled'])?>" class="frame"></div>>
 
 <div id="footer">
 </div>    

@@ -161,7 +161,9 @@
         /*request searching*/
         getSearch: function () {
             // Sends the request to the server
- 
+            $('#face_display>input').remove();
+            $('#face_display>p').remove();
+            $('#face_display>span').remove();
             var baseUrl = OC.generateUrl('apps/gallery/files/suggest/');
             $.ajax ({
                 type: 'GET',
@@ -170,6 +172,7 @@
                 success : function(data){
                     //alert(data);
                     $('#face_display>input').remove();
+                    $('#face_display>p').remove();
                     Gallery.get_face_imge(data); 
                 },
                 error : function(data) {
@@ -192,9 +195,12 @@
             var eventSource = new Gallery.EventSource(url);
                 eventSource.listen('preview',function (/**{filesname, status, mimetype, preview}*/ preview) {   
                     var bigImg = document.createElement("input");
-                      bigImg.type = "image";   
+                      bigImg.type = "image";
+                      //bigImg.style = "border-radius:25px,border:5px solid rgba(255, 255, 255, .9)";
+                      bigImg.className = "face";   
                       bigImg.src=('data:' + preview.mimetype + ';base64,' + preview.preview);
-                      bigImg.id = preview.filesname; 
+                      bigImg.id = preview.filesname;
+                      bigImg.name = preview.name;                      
                       var myDiv = document.getElementById('face_display'); 
                       myDiv.appendChild(bigImg); 
                    //$('#face_test').attr("src",('data:' + preview.mimetype + ';base64,' + preview.preview));                    
@@ -204,22 +210,67 @@
                 
         },
         get_result: function(){
-            var personID = $(this).attr("id");
-            $(this).siblings().remove();
+                    /*clear Label 'p' at id:'face_display'*/
+                    $('#face_display>p').remove();
+                    $('#face_display>span').remove();
+                    var personID = $(this).attr("id");
+                    var name = $(this).attr("name");
+                    /*delete face_display unless clicked one*/
+                    $(this).siblings().remove();
+                    /*creat Label 'p'*/
+                    var prefile = document.createElement("p");
+                        prefile.innerHTML = name;
+                        var myDiv = document.getElementById('face_display');
+                        myDiv.appendChild(prefile);
+                    var static_name = document.createElement("span");
+                        static_name.innerHTML = "NewName:  ";
+                        myDiv.appendChild(static_name);
+                    var name_edit = document.createElement("input");
+                        name_edit.type = 'text';
+                        name_edit.placeholder = 'name or personID';
+                        myDiv.appendChild(name_edit);
+                    var button = document.createElement("input");
+                        button.type = 'button';
+                        button.value = '修改'  ;
+                        myDiv.appendChild(button);
+                              
+                    var params = {
+                    personID: personID
+                    };
+                    var url =Gallery.utility.buildGalleryUrl('files', '/person', params);
+                    $.ajax ({
+                        type: 'GET',
+                        url: url,
+                        dataType : 'json', 
+                        success : function(data){                    
+                                alert(data); 
+                                },
+                        error : function(data) {
+                                alert(data);         
+                                }
+                
+            });
+        },
+        set_personID: function(){
+            var newName = $("#face_display").children(":text").val();
+            var oldName = $("#face_display").children(":image").attr("name");
+            var personID = $("#face_display").children(":image").attr("id"); 
             var params = {
-                personID: personID
-            };
-            var url =Gallery.utility.buildGalleryUrl('files', '/person', params);
-            $.ajax ({
-                type: 'GET',
-                url: url,
-                dataType : 'json', 
-                success : function(data){                    
-                    alert(data); 
-                },
-                error : function(data) {
-                    alert(data);         
-                }
+                    newName: newName,
+                    oldName: oldName,
+                    personID: personID
+                    };
+                    var url =Gallery.utility.buildGalleryUrl('files', '/setName', params);
+                    $.ajax ({
+                        type: 'GET',
+                        url: url,
+                        dataType : 'json', 
+                        success : function(data){                    
+                                alert(data); 
+                                },
+                        error : function(data) {
+                                alert(data);         
+                                }
                 
             });
         },

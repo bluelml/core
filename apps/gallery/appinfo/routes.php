@@ -98,7 +98,7 @@ return [
         // Set person's name
         [
             'name' => 'files#set_name',
-            'url'  => '/files/setName/{oldName}/{newName}',
+            'url'  => '/files/setName',
             'verb' => 'GET'            
         ],           
 		// File download

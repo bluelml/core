@@ -151,10 +151,11 @@ class PreviewController extends Controller {
             $file_ext1 = strtolower(array_pop($file_parts));
             $file_ext2 = strtolower(array_pop($file_parts));
             $file_ext3 = strtolower(array_pop($file_parts));
+            $file_ext4 = strtolower(array_pop($file_parts));
             $thumbnail['filesname'] = $file_ext3;
             $thumbnail['status'] = $status;
             $thumbnail['mimetype'] = "image/png";
-
+            $thumbnail['name'] = $file_ext4;
             $this->eventSource->send('preview', $thumbnail);
         }
         $this->eventSource->close();
