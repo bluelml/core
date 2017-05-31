@@ -206,6 +206,7 @@
                       block_image.setAttribute("name",preview.name);
                       name_tag.innerHTML = preview.name;
                       name_tag.className = "text_style";
+                      name_tag.setAttribute("style","display: none");
                     var myDiv = document.getElementById('face_display'); 
                       myDiv.appendChild(block_image);                      
                       block_image.appendChild(bigImg);
@@ -280,6 +281,22 @@
                 
             });
         },
+        
+        set_mouseover: function(){
+            /*set tag when mouse foucsed on image*/
+            $(this).children("p").remove();
+            var personID = $(this).attr("id");
+            var name_tag = document.createElement("p");
+                    name_tag.innerHTML = $(this).attr("name");
+                    name_tag.className = "text_style";
+                    name_tag.setAttribute("style","display: block");
+                    document.getElementById(personID).appendChild(name_tag);    
+        },
+        
+        set_mouseleave: function(){
+            $(this).children("p").remove();
+        },
+        
         
         
 		/**
