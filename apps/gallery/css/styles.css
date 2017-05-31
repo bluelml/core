@@ -370,6 +370,16 @@ http://www.bypeople.com/author/comatosed/*/
     border-radius:15px;
     border:2.5px solid rgba(255, 255, 255, .9);
 }
+.text_style {
+    margin-top :-32px;
+    color: #fff;
+    font-size: 13px;
+    line-height: normal;
+    width: 100%;
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
 #footer {
     background-color:rgba(36, 143, 216, 0.91);
     color:white;

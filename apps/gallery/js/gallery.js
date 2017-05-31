@@ -161,6 +161,7 @@
         /*request searching*/
         getSearch: function () {
             // Sends the request to the server
+            $('#face_display>div').remove();
             $('#face_display>input').remove();
             $('#face_display>p').remove();
             $('#face_display>span').remove();
@@ -170,8 +171,7 @@
                 url: baseUrl + $('#face-input').val() + '?' + "search=" + $('#face-input').val(),
                 dataType : 'json', 
                 success : function(data){
-                    //alert(data);
-                    $('#face_display>input').remove();
+                    //alert(data);                    
                     $('#face_display>p').remove();
                     Gallery.get_face_imge(data); 
                 },
@@ -193,18 +193,23 @@
             };
             var url =Gallery.utility.buildGalleryUrl('faceThumbnails', '', params);
             var eventSource = new Gallery.EventSource(url);
-                eventSource.listen('preview',function (/**{filesname, status, mimetype, preview}*/ preview) {   
+                eventSource.listen('preview',function (/**{filesname, status, mimetype, preview}*/ preview) {
+                /*Create a Label 'div' to incase 'input image' as face*/   
+                    var block_image = document.createElement("div");
                     var bigImg = document.createElement("input");
-                      bigImg.type = "image";
-                      //bigImg.style = "border-radius:25px,border:5px solid rgba(255, 255, 255, .9)";
-                      bigImg.className = "face";   
+                    var name_tag = document.createElement("p");
+                    block_image.style = "display: inline-block";
+                      bigImg.setAttribute("type","image"); 
+                      bigImg.setAttribute("class","face");   
                       bigImg.src=('data:' + preview.mimetype + ';base64,' + preview.preview);
-                      bigImg.id = preview.filesname;
-                      bigImg.name = preview.name;                      
-                      var myDiv = document.getElementById('face_display'); 
-                      myDiv.appendChild(bigImg); 
-                   //$('#face_test').attr("src",('data:' + preview.mimetype + ';base64,' + preview.preview));                    
-                   //alert(preview.mimetype);
+                      block_image.setAttribute("id",preview.filesname); 
+                      block_image.setAttribute("name",preview.name);
+                      name_tag.innerHTML = preview.name;
+                      name_tag.className = "text_style";
+                    var myDiv = document.getElementById('face_display'); 
+                      myDiv.appendChild(block_image);                      
+                      block_image.appendChild(bigImg);
+                      block_image.appendChild(name_tag);                       
                 });
              
                 
@@ -213,10 +218,10 @@
                     /*clear Label 'p' at id:'face_display'*/
                     $('#face_display>p').remove();
                     $('#face_display>span').remove();
+                    /*clear Label 'div' unless clicked one*/
+                    $(this).siblings().remove();
                     var personID = $(this).attr("id");
                     var name = $(this).attr("name");
-                    /*delete face_display unless clicked one*/
-                    $(this).siblings().remove();
                     /*creat Label 'p'*/
                     var prefile = document.createElement("p");
                         prefile.innerHTML = name;
@@ -251,10 +256,11 @@
                 
             });
         },
+        
         set_personID: function(){
             var newName = $("#face_display").children(":text").val();
-            var oldName = $("#face_display").children(":image").attr("name");
-            var personID = $("#face_display").children(":image").attr("id"); 
+            var oldName = $("#face_display").children("div").attr("name");
+            var personID = $("#face_display").children("div").attr("id"); 
             var params = {
                     newName: newName,
                     oldName: oldName,
@@ -274,6 +280,8 @@
                 
             });
         },
+        
+        
 		/**
 		 * Switches to the Files view
 		 *
