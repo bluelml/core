@@ -185,11 +185,11 @@ class FilesController extends Controller {
      *
      * @return ImageResponse
      */
-    public function setName($oldName, $newName) {
+    public function setName($oldName, $newName,$personID) {
         //$featuresArray = explode(';', $features);
         //$mediaTypesArray = explode(';', $mediatypes);
         try {
-            return $this->setPersonName($oldNmae, $newName);
+            return $this->setPersonName($oldName, $newName,$personID);
         } catch (\Exception $exception) {
             return $this->jsonError($exception, $this->request, $this->logger);
         }    

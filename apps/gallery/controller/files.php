@@ -173,18 +173,23 @@ trait Files {
         if (strlen($key) > 0) {
             //$hint="";
             for($i=0; $i<count($files_temp); $i++) {
-                if (strtolower($key) == strtolower(substr($files_temp[$i],0,strlen($key)))) {
+                $file_parts = explode('.',$files_temp[$i]); 
+                $file_ext1 = strtolower(array_pop($file_parts));
+                $file_ext2 = strtolower(array_pop($file_parts));
+                $file_ext3 = strtolower(array_pop($file_parts));
+                $file_ext4 = strtolower(array_pop($file_parts));
+                if (strtolower($key) == strtolower(substr($file_ext3,0,strlen($key)))) {
                     array_push($filesA, $files_temp[$i]);
-                } else if (substr($files_temp[$i],0,2) == "??"){
+                } else if (substr($file_ext3,0,2) == "??"){
                     array_push($filesB, $files_temp[$i]);
                 }
             }
         }
-        if(count($filesB) > 0) 
-            $filesA=array_merge($filesA, $filesB);
+//        if(count($filesB) > 0) 
+//            $filesA=array_merge($filesA, $filesB);
         $filesA=json_encode($filesA);
         $filesB=json_encode($filesB);
-        if($key == "")
+        if($key == " ")
             return $filesB;    //only return untagged image
         else
             return $filesA; 
@@ -217,10 +222,10 @@ trait Files {
      *
      * @return array|false
      */
-    private function setPersonName($oldName, $newName) {
+    private function setPersonName($oldName, $newName,$personID) {
         //$files = array();
         require_once '/var/www/html/owncloud/apps/faceapi/demo_api.php';
-        return $files = tagPerson($loacl_file_dir, $oldName, $newName);
+        return $files = tagPerson($loacl_file_dir, $oldName, $newName,$personID);
         
     }
 }

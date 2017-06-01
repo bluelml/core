@@ -94,6 +94,12 @@ return [
             'name' => 'preview#get_face_thumbnails',
             'url'  => '/faceThumbnails',
             'verb' => 'GET'
+        ],
+        // get person's image link to face
+        [
+            'name' => 'preview#get_person_thumbnails',
+            'url'  => '/personThumbnails',
+            'verb' => 'GET'
         ],  
         // Set person's name
         [

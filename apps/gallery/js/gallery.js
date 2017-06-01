@@ -249,8 +249,18 @@
                         type: 'GET',
                         url: url,
                         dataType : 'json', 
-                        success : function(data){                    
-                                alert(data.files); 
+                        success : function(data){
+                            var files_list = data.files; 
+                            var params_files = {
+                                         files_list: files_list.join(';')
+                                        };
+                            /*got files list and post url to request origin image link to face*/
+                            var url_files =Gallery.utility.buildGalleryUrl('personThumbnails', '', params_files);
+                            var eventSource = new Gallery.EventSource(url_files);
+                                eventSource.listen('preview',function (/**{filesname, status, mimetype, preview}*/ preview) {
+                                alert(url_files);    
+                                });                
+                                  
                                 },
                         error : function(data) {
                                 alert(data);         
