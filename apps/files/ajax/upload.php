@@ -269,7 +269,7 @@ if (\OC\Files\Filesystem::isValidPath($dir) === true) {
                 if($person_json_result['identified']) {
                     //if the guy already there, link this face to the persion.
                     $link_result = link_person_to_face($person_json_result['personId'], $face_id);
-                    $PersonName = $person_json_result['name'].'.'.$person_json_result['personId'];
+                    $PersonName = $person_json_result['personId'].'.'.$person_json_result['name'];
                     update_person_image($PersonName,
                                         $face_filename,$face_json_result['faces'][$ii]['left'],
                                         $face_json_result['faces'][$ii]['right'],
@@ -291,7 +291,7 @@ if (\OC\Files\Filesystem::isValidPath($dir) === true) {
                     //if($person_add_json_result['personId'] !== 'false')                                        
                     $personId =  $person_add_json_result['personId'];                          
                     $link_result = link_person_to_face($personId, $face_id);
-                    $PersonName = $person_rand.'.'.$personId;
+                    $PersonName = $personId.'.'.$person_rand;
                     update_person_image($PersonName, $face_filename,
                                         $face_json_result['faces'][$ii]['left'],
                                         $face_json_result['faces'][$ii]['right'],
