@@ -453,7 +453,7 @@ function getFaceImage($dir, $file) {
     return $thumbnail; 
 }
 
-/*create, add, delete file from/to personId.name.json*/
+/*create, add, delete file from/to personId.person.json*/
 /* 
 {   "personId" : "xxx string",
     "files"    : [ 
@@ -468,7 +468,7 @@ function getFaceImage($dir, $file) {
 */  
 function api_add_person_file ($path, $name, $personId, $fileId, $mode) {
     $person_file = dirname($path);
-    $person_file = $person_file."/".$personId.$name.".json";
+    $person_file = $person_file."/".$personId.".person.json";
     switch ($mode) {
         //ceate xxx.person.json
         case 0:             
@@ -501,7 +501,7 @@ function api_add_person_file ($path, $name, $personId, $fileId, $mode) {
             //the file is already here.
             $number = count($json['files']);
             for($ii = 0 ; $ii < $number; $ii++) {
-                if($fileId === $json['files'][$ii]['id']))
+                if($fileId === $json['files'][$ii]['id'])
                     return true;
             }
             
@@ -527,7 +527,7 @@ function api_add_person_file ($path, $name, $personId, $fileId, $mode) {
                  return true;
             }
             
-            $index = array_search(arry('id' => $fileId, 'file' => $path), $json['files']);
+            $index = array_search(array('id' => $fileId, 'file' => $path), $json['files']);
             if ($index !== false)
                 array_splice($json['files'], $index, 1);
                 
