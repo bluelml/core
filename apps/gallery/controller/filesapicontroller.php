@@ -169,7 +169,7 @@ class FilesApiController extends ApiController {
         //$featuresArray = explode(';', $features);
         //$mediaTypesArray = explode(';', $mediatypes);
         try {
-            return $this->getPersonImages($name);
+            return $this->getPersonImageList($name);
         } catch (\Exception $exception) {
             return $this->jsonError($exception, $this->request, $this->logger);
         }    
