@@ -380,18 +380,50 @@ function getPersonJson($dir, $name){
     return $file;
 }
 
+/*get the faceThumbnail file which include persinID, name and files*/
+function getFaceThumbnail($dir, $name){
+    $dp = opendir($dir);
+    //$fileArr = array();
+    $file = "";
+    while (!false == $curFile = readdir($dp)) {
+        if ($curFile!="." && $curFile!=".." && $curFile!="") {
+            if (is_dir($dir."/".$curFile)) {
+               if($file = getFaceThumbnail($dir."/".$curFile,$name) != "") {
+                    closedir($dp);
+                    return $file;
+               }                              
+            } else {
+                if ($curFile === $name.".face.png") {
+                    $file = $dir.'/'.$curFile;
+                    closedir($dp);
+                    return $file;
+                }                                                                     
+            }
+        }
+    }
+    
+    closedir($dp);
+    return $file;
+}
+
 /*with default the person is "??xxxx", */
-function tagPerson($dir, $oldName, $newName){
-    $personJson = getPersonJson($dir, $oldName);
-    if ($personJson !== "") 
-        rename($oldName.".person.json", $newName.".person.json");                 
+function tagPerson($dir, $oldName, $newName,$personID){
+    $check_name = $personID.'.'.$oldName;
+    $faceimage = getFaceThumbnail($dir, $check_name);
+    if ($faceimage !== ""){
+            $file_parts = explode('.',$faceimage); 
+            $file_ext1 = strtolower(array_pop($file_parts));
+            $file_ext2 = strtolower(array_pop($file_parts));
+            $file_ext3 = strtolower(array_pop($file_parts));
+            $file_ext4 = strtolower(array_pop($file_parts)); 
+        rename($file_ext4.'.'.$oldName.".face.png", 
+            $file_ext4.'.'.$newName.".face.png");
+    }                 
     else
         return false;
         
-    $js = file_get_contents($newName.".person.json");
-    $js = json_decode($js);
         
-    if(add_person($newName, $js["personId"]))
+    if(add_person($newName, $personID))
        return true;
        
     return false;        
