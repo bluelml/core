@@ -275,10 +275,11 @@ if (\OC\Files\Filesystem::isValidPath($dir) === true) {
                                         $face_json_result['faces'][$ii]['right'],
                                         $face_json_result['faces'][$ii]['top'],
                                         $face_json_result['faces'][$ii]['bottom']);
-                    //add this image to xxx.person.json                    
+                    //add this image to personId.name.json                    
                     api_add_person_file($face_filename, 
                                         $person_json_result['name'], 
-                                        $person_json_result['personId'], 
+                                        $person_json_result['personId'],
+                                        $data['id'], 
                                         1);                    
                 }
                 else {
@@ -297,8 +298,8 @@ if (\OC\Files\Filesystem::isValidPath($dir) === true) {
                                         $face_json_result['faces'][$ii]['right'],
                                         $face_json_result['faces'][$ii]['top'],
                                         $face_json_result['faces'][$ii]['bottom']);
-                    //create new ??xxx.person.json
-                    api_add_person_file($face_filename, $person_rand, $personId, 0);                                        
+                    //create new personid.name.json
+                    api_add_person_file($face_filename, $person_rand, $personId, $data['id'], 0);                                        
                 }     
             }
             
