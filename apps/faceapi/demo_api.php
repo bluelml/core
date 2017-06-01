@@ -421,16 +421,22 @@ function getFaceImage($dir, $file) {
     return $thumbnail; 
 }
 
-/*create, add, delete file from/to personId.person.json*/
+/*create, add, delete file from/to personId.name.json*/
 /* 
-{   "name"     : "name"
-    "personId" : "xxx string",
-    "files"    : [ "xx1.person.json", "xx2.person.json", "xx3.person.json"]                                 
+{   "personId" : "xxx string",
+    "files"    : [ 
+                    { id   : xxx,
+                      file :"xx1.person.json"
+                    }, 
+                    { id   : xxx,
+                      file :"xx2.person.json" 
+                    }
+                 ]                                 
 }
 */  
-function api_add_person_file ($path, $name, $personId, $mode) {
+function api_add_person_file ($path, $name, $personId, $fileId, $mode) {
     $person_file = dirname($path);
-    $person_file = $person_file."/".$personId.".person.json";
+    $person_file = $person_file."/".$personId.$name.".json";
     switch ($mode) {
         //ceate xxx.person.json
         case 0:             
@@ -461,11 +467,14 @@ function api_add_person_file ($path, $name, $personId, $mode) {
                 return false;
                 
             //the file is already here.
-            if(in_array($path, $json['files']))
-                return true;
+            $number = count($json['files']);
+            for($ii = 0 ; $ii < $number; $ii++) {
+                if($fileId === $json['files'][$ii]['id']))
+                    return true;
+            }
             
             //$tmp =  ($json['files']);
-            array_push($json['files'], $path);
+            array_push($json['files'], array('id' => $personId, 'file' => $path));
             //array_push($json['files'], $path);
               
             $json = json_encode($json);
@@ -486,7 +495,7 @@ function api_add_person_file ($path, $name, $personId, $mode) {
                  return true;
             }
             
-            $index = array_search($path, $json['files']);
+            $index = array_search(arry('id' => $fileId, 'file' => $path), $json['files']);
             if ($index !== false)
                 array_splice($json['files'], $index, 1);
                 
