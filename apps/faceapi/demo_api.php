@@ -362,15 +362,15 @@ function getPersonJson($dir, $name){
     while (!false == $curFile = readdir($dp)) {
         if ($curFile!="." && $curFile!=".." && $curFile!="") {
             if (is_dir($dir."/".$curFile)) {
-               if($file = getPersonJson($dir."/".$curFile) != "") {
+               if($file = getPersonJson($dir."/".$curFile,$name) != "") {
                     closedir($dp);
-                    return $curFile;
+                    return $file;
                }                              
             } else {
                 if ($curFile === $name.".person.json") {
-                    $file = $dir.$curfile;
+                    $file = $dir.'/'.$curFile;
                     closedir($dp);
-                    return $curFile;
+                    return $file;
                 }                                                                     
             }
         }

@@ -198,7 +198,8 @@
                     var block_image = document.createElement("div");
                     var bigImg = document.createElement("input");
                     var name_tag = document.createElement("p");
-                    block_image.style = "display: inline-block";
+                     // block_image.style = "display: inline-block";
+                      block_image.className = "block_style";
                       bigImg.setAttribute("type","image"); 
                       bigImg.setAttribute("class","face");   
                       bigImg.src=('data:' + preview.mimetype + ';base64,' + preview.preview);
@@ -249,7 +250,7 @@
                         url: url,
                         dataType : 'json', 
                         success : function(data){                    
-                                alert(data); 
+                                alert(data.files); 
                                 },
                         error : function(data) {
                                 alert(data);         

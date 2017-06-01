@@ -166,10 +166,10 @@ class FilesController extends Controller {
      * @return ImageResponse
      */
     public function personList($personID) {
-        $$personArray = explode(';', $personID);
         //$mediaTypesArray = explode(';', $mediatypes);
         try {
-            return $this->getPersonImageList($$personArray);
+            echo $this->getPersonImageList($personID);
+            exit;
         } catch (\Exception $exception) {
             return $this->jsonError($exception, $this->request, $this->logger);
         }    

@@ -381,6 +381,11 @@ http://www.bypeople.com/author/comatosed/*/
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+.block_style {
+    display:inline-block;
+    *display:inline;
+    *zoom:1;
+}
 #footer {
     background-color:rgba(36, 143, 216, 0.91);
     color:white;
