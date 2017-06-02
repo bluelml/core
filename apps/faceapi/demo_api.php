@@ -481,7 +481,7 @@ function api_add_person_file ($path, $name, $personId, $fileId, $mode) {
             $data = json_encode($data);
             fwrite($fp, $data); 
             fclose($fp);
-            api_add_person_file($path, $name, $personId, 1);
+            api_add_person_file($path, $name, $personId, $fileId, 1);
             break;
             
         //add image file to xxx.person.json 
@@ -490,7 +490,7 @@ function api_add_person_file ($path, $name, $personId, $fileId, $mode) {
             
             //create new file
             if(!$json) {
-               api_add_person_file($path, $name, $personId, 0);
+               api_add_person_file($path, $name, $personId, $fileId, 0);
                $json = file_get_contents($person_file); 
             }
                
@@ -506,7 +506,7 @@ function api_add_person_file ($path, $name, $personId, $fileId, $mode) {
             }
             
             //$tmp =  ($json['files']);
-            array_push($json['files'], array('id' => $personId, 'file' => $path));
+            array_push($json['files'], array('id' => $fileId, 'file' => $path));
             //array_push($json['files'], $path);
               
             $json = json_encode($json);
