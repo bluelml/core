@@ -102,8 +102,6 @@ style(
 
 	<span class="right">
     <div class="control">
-        <input id="face-input" type="search"  placeholder="Search" /> 
-        <input id="face-button" type="button" name="s" value="Search"  />
     </div>     
 		<!-- sharing button -->   
         <div id="share-button" class="button">

@@ -289,7 +289,7 @@ $source_info = getimagesize($source_file);
 $source_width = $source_info[0];
 $source_height = $source_info[1];
 $source_mime = $source_info['mime'];
-$target_height = $target_width = 150;
+$target_height = $target_width = 100;
 
 $cut_x = $cut_left;
 $cut_y = $cut_top;

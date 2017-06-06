@@ -182,3 +182,9 @@ http://davidwalsh.name/css-flip*/
     border-right: 1px solid rgba(216, 216, 216, 0.9);
     
 }
+#face-input{
+        width: 60px;
+}
+#face-button{
+        width: 70px;
+}

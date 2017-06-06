@@ -173,13 +173,21 @@
             $.ajax ({
                 type: 'GET',
                 url: baseUrl + $('#face-input').val() + '?' + "search=" + $('#face-input').val(),
-                dataType : 'json', 
+                dataType : 'json',
+                beforeSend:function(){
+                $('#face-input').attr({"disabled":"disabled"});
+                $('#face-button').attr({"disabled":"disabled"});    
+                }, 
                 success : function(data){
-                    //alert(data);                    
+                    //alert(data);
+                    $('#face-input').removeAttr("disabled");
+                    $('#face-button').removeAttr("disabled");                    
                     $('#face_display>p').remove();
                     Gallery.get_face_imge(data); 
                 },
                 error : function(data) {
+                    $('#face-input').removeAttr("disabled");
+                    $('#face-button').removeAttr("disabled");
                     alert("请输入需要查询的id");         
                 }
                 
