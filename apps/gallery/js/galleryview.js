@@ -321,7 +321,7 @@
 			$('#album-info-button').click(Gallery.showInfo);
 			$('#sort-name-button').click(Gallery.sorter);
 			$('#sort-date-button').click(Gallery.sorter);
-            $('#face-input').keyup(Gallery.getSearch);
+            $('#face-input').keyup(Gallery.Enter_key_up);
             $('#face-button').click(Gallery.getSearch);
             $('#face_display ').on('click','div',Gallery.get_result);
             $('#face_display ').on('mouseover','div',Gallery.set_mouseover);
