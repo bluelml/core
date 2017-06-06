@@ -15,7 +15,11 @@
 		buttonsWidth: 600,
 		browserToolbarHeight: 150,
 		filesClient: null,
-
+        faceflag : false,
+        /*files_id is a global array that store files_id about face pictures*/
+        files_id : new Array(),
+        /*image_result is a global variable that store pictures about faces */
+        image_result : 0, 
 		/**
 		 * Refreshes the view and starts the slideshow if required
 		 *
@@ -176,7 +180,7 @@
                     Gallery.get_face_imge(data); 
                 },
                 error : function(data) {
-                    alert(data);         
+                    alert("请输入需要查询的id");         
                 }
                 
             }); 
@@ -250,21 +254,21 @@
                         url: url,
                         dataType : 'json', 
                         success : function(data){
-                            var files_list = data.files; 
-                            var params_files = {
-                                         files_list: files_list.join(';')
-                                        };
-                            /*got files list and post url to request origin image link to face*/
-                            var url_files =Gallery.utility.buildGalleryUrl('personThumbnails', '', params_files);
-                            var eventSource = new Gallery.EventSource(url_files);
-                                eventSource.listen('preview',function (/**{filesname, status, mimetype, preview}*/ preview) {
-                                alert(url_files);    
-                                });                
-                                  
+                            var i,fileslength = data.files.length;
+                            /*Clear array files_id*/
+                            Gallery.files_id = [];
+                            for(i=0;i<fileslength;i++){
+                                 Gallery.files_id[i]= data.files[i].id;
+                            }
+                            /*Change faceflag to true */   
+                            Gallery.faceflag = true; 
+                            var albumPath = "";
+                            Gallery.view.viewAlbum(albumPath);     
                                 },
                         error : function(data) {
                                 alert(data);         
                                 }
+                                
                 
             });
         },
@@ -308,7 +312,12 @@
             $(this).children("p").remove();
         },
         
-        
+        Enter_key_up : function(){
+            var e = window.event || arguments.callee.caller.arguments[0];
+            if (e && e.keyCode == 13 ) {
+             Gallery.getSearch();
+         }
+        },
         
 		/**
 		 * Switches to the Files view

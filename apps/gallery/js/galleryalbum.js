@@ -168,8 +168,24 @@
 					(album.preloadOffset < images.length)) {
 					album._preload(numberOfThumbnailsToPreload);
 				}
+                /*Add switch to control display someones picture when Gallery.faceflag is true*/
+                if(Gallery.faceflag === false){
+                    var image = images[album.viewedItems];    
+                }
+                else{
+                    
+                   var files_length = Gallery.files_id.length;
+                   var images_length = images.length;
+                   var tmp = null;
+                   for (var i = 0;i<images_length;i++){
+                       if(Gallery.files_id[album.viewedItems] === Number(images[i].fileId)){
+                               tmp = i;
+                       }     
+                       Gallery.image_result = tmp;
+                   }
+                   var image = images[Gallery.image_result];
+                }
 
-				var image = images[album.viewedItems];
 				return row.addElement(image).then(function (more) {
 					album.viewedItems++;
 					if (more && album.viewedItems < images.length) {

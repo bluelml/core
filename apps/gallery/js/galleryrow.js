@@ -67,7 +67,9 @@
 			var fileNotFoundStatus = 404;
 			var def = new $.Deferred();
 			var itemDom;
-
+            /*Use to end loading images about face */
+            if (Gallery.image_result === null)
+                return def.resolve(false);   
 			var validateRowWidth = function (width) {
 				row.items.push(element);
 				row.width += width + 4; // add 4px for the margin
