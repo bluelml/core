@@ -250,7 +250,7 @@ if (\OC\Files\Filesystem::isValidPath($dir) === true) {
         //add code here to call face api.
         //local path = $dir + $relativePath
         $face_filename = $files['name'][$i];
-        $face_filename = $loacl_file_dir.'/'.$face_filename;
+        $face_filename = $loacl_file_dir.$returnedDir.'/'.$face_filename;
         //call face detect api to get *.json file.   
         if($face_result = api_detect_face($face_filename)) {
             $json_name = rtrim($face_filename, '.');
@@ -270,11 +270,15 @@ if (\OC\Files\Filesystem::isValidPath($dir) === true) {
                     //if the guy already there, link this face to the persion.
                     $link_result = link_person_to_face($person_json_result['personId'], $face_id);
                     $PersonName = $person_json_result['personId'].'.'.$person_json_result['name'];
-                    update_person_image($PersonName,
+                    //adjust the thresthold for updating the thumbnail,
+                    //small or negative faceness will impact the customer experience.
+                    if($face_json_result['faces'][$ii]['faceness'] > 0.1) {
+                        update_person_image($PersonName,
                                         $face_filename,$face_json_result['faces'][$ii]['left'],
                                         $face_json_result['faces'][$ii]['right'],
                                         $face_json_result['faces'][$ii]['top'],
                                         $face_json_result['faces'][$ii]['bottom']);
+                    }
                     //add this image to personId.person.json                    
                     api_add_person_file($face_filename, 
                                         $person_json_result['name'], 
