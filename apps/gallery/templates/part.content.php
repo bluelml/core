@@ -101,10 +101,10 @@ style(
 	<div id="file_action_panel"></div>
 
 	<span class="right">
-    <div class="control">
+    <!--<div class="control">
         <input id="face-input"  type="search"  placeholder="Search" /> 
-        <input id="face-button"  type="button" name="s"  />
-    </div>     
+        <input id="face-button"  type="button" name="s"  />    
+    </div>-->     
 		<!-- sharing button -->   
         <div id="share-button" class="button">
 			<img class="svg" src="<?php print_unescaped(
@@ -133,6 +133,10 @@ style(
 			); ?>" alt="<?php p($l->t('File list')); ?>"/>
 		</div>
 	</span>   
+</div>
+<div id="search_container" class="search_bar">
+        <input id="face-input"  type="search"  placeholder="Search" /> 
+        <input id="face-button"  type="button" name="s"  />
 </div>
 <div id="face_display" data-allow-public-upload="<?php p($_['publicUploadEnabled'])?>" class="frame"></div>
 

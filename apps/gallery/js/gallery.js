@@ -170,9 +170,16 @@
             $('#face_display>p').remove();
             $('#face_display>span').remove();
             var baseUrl = OC.generateUrl('apps/gallery/files/suggest/');
+
+            if (($('#face-input').val().length) === 0){
+                URL = baseUrl + "**1**" + '?' + "search=" + "**1**";
+            }
+            else{
+                URL = baseUrl + $('#face-input').val() + '?' + "search=" + $('#face-input').val();
+            }
             $.ajax ({
                 type: 'GET',
-                url: baseUrl + $('#face-input').val() + '?' + "search=" + $('#face-input').val(),
+                url: URL,
                 dataType : 'json',
                 beforeSend:function(){
                 $('#face-input').attr({"disabled":"disabled"});

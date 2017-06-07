@@ -172,6 +172,10 @@ trait Files {
         
         if (strlen($key) > 0) {
             //$hint="";
+            if ($key == "**1**"){
+                $filesA = $files_temp;  
+            }
+            else{
             for($i=0; $i<count($files_temp); $i++) {
                 $file_parts = explode('.',$files_temp[$i]); 
                 $file_ext1 = strtolower(array_pop($file_parts));
@@ -183,6 +187,7 @@ trait Files {
                 } else if (substr($file_ext3,0,2) == "??"){
                     array_push($filesB, $files_temp[$i]);
                 }
+            }
             }
         }
 //        if(count($filesB) > 0) 

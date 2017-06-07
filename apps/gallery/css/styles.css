@@ -356,14 +356,22 @@ http://www.bypeople.com/author/comatosed/*/
 .icon-loading-dark.small {
 	background-size: 16px;
 }
-
-#face_display.frame {
+#search_container.search_bar {
     position: relative;
     overflow: hidden;
     text-align: center;
     top: 45px;
     padding-bottom: 0px;
     margin-bottom: 45px;
+    margin-top: 5px;
+}
+#face_display.frame {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    top: 0;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
     margin-top: 5px;
 }
 .face {
