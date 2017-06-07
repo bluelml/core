@@ -186,5 +186,9 @@ http://davidwalsh.name/css-flip*/
         width: 60px;
 }
 #face-button{
-        width: 70px;
+        background: rgba(249, 245, 245, 0) url(../img/actions/search.svg) no-repeat 6px center;
+        color: #fff;
+        width: 28px;
+        height:21px;
+        border:none;
 }
