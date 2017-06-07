@@ -38,6 +38,7 @@ $(document).ready(function () {
 					.then(function () {
 						Gallery.getFiles(currentLocation).then(function () {
 							window.onhashchange();
+                            Gallery.getSearch();
 						});
 					});
 			});
