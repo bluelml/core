@@ -38,6 +38,9 @@ $(document).ready(function () {
 					.then(function () {
 						Gallery.getFiles(currentLocation).then(function () {
 							window.onhashchange();
+                            /*Adapt search bar to window size when window init*/
+                            var tmp_width = window.innerWidth/2 - 110;
+                            $('.search_bar').css('margin-left',tmp_width);
 						});
 					});
 			});
@@ -58,6 +61,9 @@ $(document).ready(function () {
 			var infoContentContainer = $('.album-info-container');
 			// This section redraws the photowall and limits the width of dropdowns
 			if (windowWidth !== $(window).width()) {
+                    /*Adapt search bar to window size when windows changed*/
+                    var tmp_width = window.innerWidth/2 - 110;
+                    $('.search_bar').css('margin-left',tmp_width);
 				if ($('#emptycontent').is(':hidden')) {
 					Gallery.view.viewAlbum(Gallery.currentAlbum);
 					infoContentContainer.css('max-width', $(window).width());

@@ -184,12 +184,18 @@ http://davidwalsh.name/css-flip*/
 }
 #face-input{
         width: 200px;
-        margin-left: 28px;
+        height :33px;
+        border-radius: 6px;
+        border: 1px solid; 
+        color: rgba(25, 24, 24, 0.74);
+        vertical-align:middle;
 }
 #face-button{
-        background: rgba(249, 245, 245, 0) url(../img/actions/search.svg) no-repeat 6px center;
+        background: rgba(84, 3, 84, 0.96) url(../img/actions/search-white.svg) no-repeat 6px center;
         color: #fff;
+        vertical-align:middle;
         width: 28px;
-        height:21px;
+        height:33px;
+        margin-left: -6px;
         border:none;
 }
