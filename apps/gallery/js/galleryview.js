@@ -52,6 +52,7 @@
 				Gallery.view.showEmptyFolder(albumPath, errorMessage);
 			} else {
 				this.viewAlbum(albumPath);
+                 Gallery.getSearch();
 			}
 
 			this._setBackgroundColour();
