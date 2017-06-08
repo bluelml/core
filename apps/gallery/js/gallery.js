@@ -172,14 +172,19 @@
             var baseUrl = OC.generateUrl('apps/gallery/files/suggest/');
 
             if (($('#face-input').val().length) === 0){
-                URL = baseUrl + "**1**" + '?' + "search=" + "**1**";
+                var search_url = baseUrl + "**1**" + '?' + "search=" + "**1**";
+                /*when search value is empty,dispaly all image*/
+                    Gallery.image_result = 0;
+                    Gallery.faceflag = false; 
+                var albumPath = "";
+                    Gallery.view.viewAlbum(albumPath);
             }
             else{
-                URL = baseUrl + $('#face-input').val() + '?' + "search=" + $('#face-input').val();
+                var search_url = baseUrl + $('#face-input').val() + '?' + "search=" + $('#face-input').val();
             }
             $.ajax ({
                 type: 'GET',
-                url: URL,
+                url: search_url,
                 dataType : 'json',
                 beforeSend:function(){
                 $('#face-input').attr({"disabled":"disabled"});
@@ -236,10 +241,7 @@
                 
         },
         get_result: function(){
-                    /*clear Label 'p' at id:'face_display'*/
-                    $('#face_display>p').remove();
-                    $('#face_display>span').remove();
-                    /*clear Label 'div' unless clicked one*/
+                    /*clear Label unless clicked one include 'p','span','input'*/
                     $(this).siblings().remove();
                     var personID = $(this).attr("id");
                     var name = $(this).attr("name");
@@ -291,25 +293,35 @@
         set_personID: function(){
             var newName = $("#face_display").children(":text").val();
             var oldName = $("#face_display").children("div").attr("name");
-            var personID = $("#face_display").children("div").attr("id"); 
-            var params = {
-                    newName: newName,
-                    oldName: oldName,
-                    personID: personID
+            var personID = $("#face_display").children("div").attr("id");
+            if (newName === ""){
+                       alert("请输入需要命名的名字，输入空错误");
+                       return false;
+            }
+            else{
+                    var params = {
+                        newName: newName,
+                        oldName: oldName,
+                        personID: personID
                     };
                     var url =Gallery.utility.buildGalleryUrl('files', '/setName', params);
                     $.ajax ({
                         type: 'GET',
                         url: url,
                         dataType : 'json', 
-                        success : function(data){                    
-                                alert(data); 
+                        success : function(data){
+                                var div_doc = document.getElementById(personID);
+                                    div_doc.setAttribute("name",newName);
+                                    $('#face_display>p').html(newName);                      
+                                 
                                 },
                         error : function(data) {
                                 alert(data);         
                                 }
                 
-            });
+                    });
+            } 
+            
         },
         
         set_mouseover: function(){
