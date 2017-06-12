@@ -95,7 +95,7 @@ window.onhashchange = function () {
 	var currentLocation = window.location.href.split('#')[1] || '';
 	// The hash location is ALWAYS encoded, despite what the browser shows
 	var path = decodeURIComponent(currentLocation);
-
+    Gallery.GlobalPath = path;
 	// This section tries to determine if the hash location points to a file or a folder
 	var albumPath = OC.dirname(path);
 	if (Gallery.albumMap[path]) {
