@@ -82,7 +82,7 @@ function _get_api_url($api_name){
     $api_key = $face_server_conf['API_KEY'];
     $api_secret = $face_server_conf['API_SECRET'];
 
-    $api_Url .='?apikey=' . urlencode($api_key);
+    $api_Url .='?apikey=' . urlencode($api_key) . '&secretkey=' . urlencode($api_secret);
 
     return($api_Url);
 }
@@ -283,7 +283,7 @@ function api_detect_face($input_file) {
 }
 
 /*cut face*/
-function update_person_image($personID, $source_file, $cut_left,$cut_right, $cut_top, $cut_bottom)
+function update_person_image($personID, $source_file, $cut_left,$cut_right, $cut_top, $cut_bottom, $face_uid)
 {
 $source_info = getimagesize($source_file);
 $source_width = $source_info[0];
@@ -320,11 +320,13 @@ imagecopyresampled($target_image, $source_image, 0,0, $cut_x, $cut_y,
                    $target_width, $target_height, $cut_height, $cut_width);
 
 $fileName = $personID .".face.png";
-$loacl_file_dir="/var/www/html/owncloud/data/admin/files";
+$loacl_file_dir="/var/www/html/owncloud/data/".$face_uid."/files";
 
 //this functin should be chagne, if there is alread a same file
 imagepng($target_image,$loacl_file_dir.'/'.$fileName);
 
+//return path+name of thumbnail
+return $loacl_file_dir.'/'.$fileName;
 }
 
 

@@ -27,6 +27,12 @@ use OCA\Gallery\Service\SearchMediaService;
 use OCA\Gallery\Service\DownloadService;
 use OCA\Gallery\Service\ServiceException;
 
+
+//include face database
+require_once '/var/www/html/owncloud/apps/gallery/db/face_db.php';
+use OCA\Gallery\FaceDb;
+
+
 /**
  * Class FilesController
  *
@@ -39,6 +45,9 @@ class FilesController extends Controller {
 
 	/** @var IURLGenerator */
 	private $urlGenerator;
+    
+    private $faceDatabase;
+    private $db;
 
 	/**
 	 * Constructor
@@ -70,6 +79,8 @@ class FilesController extends Controller {
 		$this->searchMediaService = $searchMediaService;
 		$this->downloadService = $downloadService;
 		$this->logger = $logger;
+        $this->db = \OC::$server->getDatabaseConnection();
+        $this->faceDatabase = new FaceDb($this->db);
 	}
 
 	/**

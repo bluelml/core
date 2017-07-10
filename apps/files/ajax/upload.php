@@ -45,8 +45,21 @@ OCP\JSON::setContentTypeHeader('text/plain');
 $errorCode = null;
 
 //include face api
-require_once '/var/www/html/owncloud/apps/faceapi/demo_api.php';
-$loacl_file_dir='/var/www/html/owncloud/data/admin/files';
+require_once '/var/www/html/owncloud/apps/faceapi/demo_api.php';  
+//should read from config file, so we can mount this folder to other disk.
+$loacl_file_dir='/var/www/html/owncloud/data/';
+//catch database                                                                         
+require_once 'apps/gallery/db/face_db.php';
+use OCA\Gallery\FaceDb;
+$db = \OC::$server->getDatabaseConnection();
+if(!isset($faceDatabase))           
+    $faceDatabase = new OCA\Gallery\FaceDb($db);
+    
+/*require_once 'apps/faceapi/face_db.php';
+$db = \OC::$server->getDatabaseConnection();
+if(!isset($faceDatabase)) 
+    $faceDatabase = new FaceDb($db);    
+*/
 
 $l = \OC::$server->getL10N('files');
 if (empty($_POST['dirToken'])) {
@@ -247,68 +260,74 @@ if (\OC\Files\Filesystem::isValidPath($dir) === true) {
 		}
 
         /*iterate all upload files */
-        //add code here to call face api.
-        //local path = $dir + $relativePath
-        $face_filename = $files['name'][$i];
-        $face_filename = $loacl_file_dir.$returnedDir.'/'.$face_filename;
-        //call face detect api to get *.json file.   
-        if($face_result = api_detect_face($face_filename)) {
-            $json_name = rtrim($face_filename, '.');
-            if($json_file = fopen($json_name.'.json', "w")) {
-                fwrite($json_file, $face_result);
-                fclose($json_file);
-            }
+        //add code here to call face api if the file is image.        
+        $file_type = $data['mimetype'];
+        if (substr($file_type, 0, 5) === 'image') {
+        
+            $face_uid = \OC\Files\Filesystem::getOwner($target);
             
-            //detect person via face compare api
-            $face_json_result = json_decode($face_result,true);
-            $face_count = count($face_json_result['faces']);
-            for($ii = 0; $ii < $face_count; $ii++) {
-                $face_id = $face_json_result['faces'][$ii]['faceId'];
-                $person_result = identify_face($face_id);
-                $person_json_result = json_decode($person_result, true);
-                if($person_json_result['identified']) {
-                    //if the guy already there, link this face to the persion.
-                    $link_result = link_person_to_face($person_json_result['personId'], $face_id);
-                    $PersonName = $person_json_result['personId'].'.'.$person_json_result['name'];
-                    //adjust the thresthold for updating the thumbnail,
-                    //small or negative faceness will impact the customer experience.
-                    if($face_json_result['faces'][$ii]['faceness'] > 0.1) {
-                        update_person_image($PersonName,
-                                        $face_filename,$face_json_result['faces'][$ii]['left'],
-                                        $face_json_result['faces'][$ii]['right'],
-                                        $face_json_result['faces'][$ii]['top'],
-                                        $face_json_result['faces'][$ii]['bottom']);
+            $face_path = $loacl_file_dir.$face_uid.'/'.$meta['path'];
+            $face_filename = $face_path;
+            $face_fid = $data['id'];            
+             
+            
+            //call face detect api to get *.json file.   
+            if($face_result = api_detect_face($face_filename)) {               
+                
+                //detect person via face compare api
+                $face_json_result = json_decode($face_result,true);
+                $face_count = count($face_json_result['faces']);
+                for($ii = 0; $ii < $face_count; $ii++) {                
+                    $face_id = $face_json_result['faces'][$ii]['faceId'];
+                    $face_faceness = $face_json_result['faces'][$ii]['faceness'];    
+                    //????? same face on same photo will return different face_id. 
+                    //That's a problem if the user update same photo several times.
+                    //Should delete these entries according to same fileId.         
+                    $faceDatabase->faceInsert($face_id, $face_faceness, $face_fid, $face_uid, $face_path);
+                    $person_result = identify_face($face_id);
+                    $person_json_result = json_decode($person_result, true);
+                    if($person_json_result['identified']) {
+                        //if the guy already there, link this face to the persion.
+                        $link_result = link_person_to_face($person_json_result['personId'], $face_id);
+                        $PersonName = $person_json_result['personId'].'.'.$person_json_result['name'];
+                        //adjust the thresthold for updating the thumbnail,
+                        //small or negative faceness will impact the customer experience.
+                        if($face_json_result['faces'][$ii]['faceness'] > 0.3) {
+                            $thumbNailName = update_person_image($PersonName,
+                                            $face_filename,$face_json_result['faces'][$ii]['left'],
+                                            $face_json_result['faces'][$ii]['right'],
+                                            $face_json_result['faces'][$ii]['top'],
+                                            $face_json_result['faces'][$ii]['bottom'],
+                                            $face_uid);
+                        }
+                        
+                        if (!$faceDatabase->havePersonId($person_json_result['personId'], $face_uid))
+                            $faceDatabase->personUpdateThumbnail($person_json_result['personId'], $thumbNailName, $face_uid);                 
+                        else
+                            $faceDatabase->personInsert($person_json_result['personId'], $thumbNailName, $face_uid);
                     }
-                    //add this image to personId.person.json                    
-                    api_add_person_file($face_filename, 
-                                        $person_json_result['name'], 
-                                        $person_json_result['personId'],
-                                        $data['id'], 
-                                        1);                    
-                }
-                else {
-                    //can't find the person, create a person id with "??"+"random number"
-                    //we will change the person id later with the new tag.
-                    $person_rand = strtotime("now") + rand();
-                    $person_rand = '??'.(string)$person_rand;
-                    $person_add_result = add_person($person_rand);
-                    $person_add_json_result =  json_decode($person_add_result, true);
-                    //if($person_add_json_result['personId'] !== 'false')                                        
-                    $personId =  $person_add_json_result['personId'];                          
-                    $link_result = link_person_to_face($personId, $face_id);
-                    $PersonName = $personId.'.'.$person_rand;
-                    update_person_image($PersonName, $face_filename,
-                                        $face_json_result['faces'][$ii]['left'],
-                                        $face_json_result['faces'][$ii]['right'],
-                                        $face_json_result['faces'][$ii]['top'],
-                                        $face_json_result['faces'][$ii]['bottom']);
-                    //create new personid.person.json
-                    api_add_person_file($face_filename, $person_rand, $personId, $data['id'], 0);                                        
-                }     
+                    else {
+                        //can't find the person, create a person id with "??"+"random number"
+                        //we will change the person id later with the new tag.
+                        $person_rand = strtotime("now") + rand();
+                        $person_rand = '??'.(string)$person_rand;
+                        $person_add_result = add_person($person_rand);
+                        $person_add_json_result =  json_decode($person_add_result, true);
+                        //if($person_add_json_result['personId'] !== 'false')                                        
+                        $personId =  $person_add_json_result['personId'];                          
+                        $link_result = link_person_to_face($personId, $face_id);
+                        $PersonName = $personId.'.'.$person_rand;
+                        $thumbNailName = update_person_image($PersonName, $face_filename,
+                                            $face_json_result['faces'][$ii]['left'],
+                                            $face_json_result['faces'][$ii]['right'],
+                                            $face_json_result['faces'][$ii]['top'],
+                                            $face_json_result['faces'][$ii]['bottom'],
+                                            $face_uid);
+                                                                
+                        $faceDatabase->personInsert($person_json_result['personId'], $thumbNailName, $face_uid);
+                    }     
+                }            
             }
-            
-            //$face_count = count($face_data);
-            
         }
     }
 } else {
