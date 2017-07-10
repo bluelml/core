@@ -18,8 +18,10 @@
         faceflag : false,
         /*files_id is a global array that store files_id about face pictures*/
         files_id : new Array(),
+        GlobalPath : '',
         /*image_result is a global variable that store pictures about faces */
-        image_result : 0, 
+        image_result : 0,
+         
 		/**
 		 * Refreshes the view and starts the slideshow if required
 		 *
@@ -176,8 +178,7 @@
                 /*when search value is empty,dispaly all image*/
                     Gallery.image_result = 0;
                     Gallery.faceflag = false; 
-                var albumPath = "";
-                    Gallery.view.viewAlbum(albumPath);
+                    Gallery.view.viewAlbum(Gallery.GlobalPath);
             }
             else{
                 var search_url = baseUrl + $('#face-input').val() + '?' + "search=" + $('#face-input').val();
@@ -215,6 +216,11 @@
             var params = {
                 face_list: face_list.join(';')
             };
+            var person_title = document.createElement("p");
+            person_title.innerHTML = "人物";
+            person_title.className = "person_title";
+            var myDiv = document.getElementById('face_display'); 
+            myDiv.appendChild(person_title);
             var url =Gallery.utility.buildGalleryUrl('faceThumbnails', '', params);
             var eventSource = new Gallery.EventSource(url);
                 eventSource.listen('preview',function (/**{filesname, status, mimetype, preview}*/ preview) {
@@ -279,8 +285,7 @@
                             }
                             /*Change faceflag to true */   
                             Gallery.faceflag = true; 
-                            var albumPath = "";
-                            Gallery.view.viewAlbum(albumPath);     
+                            Gallery.view.viewAlbum(Gallery.GlobalPath);     
                                 },
                         error : function(data) {
                                 alert(data);         

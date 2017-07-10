@@ -364,7 +364,7 @@ function getPersonJson($dir, $name){
     while (!false == $curFile = readdir($dp)) {
         if ($curFile!="." && $curFile!=".." && $curFile!="") {
             if (is_dir($dir."/".$curFile)) {
-               if($file = getPersonJson($dir."/".$curFile,$name) != "") {
+               if(($file = getPersonJson($dir."/".$curFile,$name)) != "") {
                     closedir($dp);
                     return $file;
                }                              
